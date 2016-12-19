@@ -1,11 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>qcy.rpc</groupId>
-  <artifactId>rpc-framework</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>pom</packaging>
-  <name>rpc-framework</name>
-  <modules>
-  	<module>rpc-framework-server</module>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>qcy.rpc</groupId>
+	<artifactId>rpc-framework</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+	<name>rpc-framework</name>
+	<modules>
+		<module>rpc-framework-server</module>
+    <module>bootStrap</module>
   </modules>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>io.netty</groupId>
+			<artifactId>netty-all</artifactId>
+			<version>4.1.6.Final</version>
+		</dependency>
+		<!-- logback 日志 -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.1.7</version>
+		</dependency>
+		
+	</dependencies>
 </project>
