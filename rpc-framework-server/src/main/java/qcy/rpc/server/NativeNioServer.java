@@ -10,7 +10,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import sun.nio.ch.DirectBuffer;
+import qcy.rpc.buffer.DirectBufferPool;
 
 public class NativeNioServer {
 
@@ -67,7 +67,8 @@ public class NativeNioServer {
         }
 
         /**
-         * socket channel 的 Read/Write 处理
+         * socket channel 的 Read/Write 处理 这里是从default Group线程池里调度的 那么如果使用thradlocal
+         * 变量保存池化的byteBuffer 将会是这个线程使用。
          */
         @Override
         public Object call() throws Exception {
@@ -78,8 +79,7 @@ public class NativeNioServer {
             // -XX:MaxDirectMemorySize= 需要设置大小，默认为-Xmx相同
             // 这个是每个线程threadlocal的。NIO中worker线程为2cpu-1个，因此没有问题。
             // 那么就要尽量保持buffer重用，足够大小
-            final ByteBuffer b = ByteBuffer.allocateDirect(1024 * 1024);
-            DirectBuffer db;
+            final ByteBuffer b = DirectBufferPool.getBuffer();
             // sun 的实现中，如果buffer已满，将会返回 0 result。
             socketChannel.read(b, b, new Dispatcher(socketChannel));
             return null;
@@ -129,17 +129,13 @@ public class NativeNioServer {
                 // then go on, finished reading
                 System.out.println("this channel read finished resultCode:" + result);
                 System.out.println("read content:" + new String(request, "utf-8"));
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
 
         @Override
         public void failed(Throwable exc, ByteBuffer attachment) {
-            // TODO Auto-generated method stub
-
         }
 
     }
