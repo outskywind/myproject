@@ -74,9 +74,11 @@ public class NativeNioServer {
             // implements the worker reactor; NIO2 异步通道
             // 直接内存 不会由GC回收，切记切记，需要手动释放
             // 而且分配时比较耗时，应该使用缓存的ByteBuffer 内存池。
-            // 8k大小，to be tuned , linux socket 默认socket buffer为8k
+            // 1M大小， linux socket 默认socket buffer为8k
             // -XX:MaxDirectMemorySize= 需要设置大小，默认为-Xmx相同
-            final ByteBuffer b = ByteBuffer.allocateDirect(8192);
+            // 这个是每个线程threadlocal的。NIO中worker线程为2cpu-1个，因此没有问题。
+            // 那么就要尽量保持buffer重用，足够大小
+            final ByteBuffer b = ByteBuffer.allocateDirect(1024 * 1024);
             DirectBuffer db;
             // sun 的实现中，如果buffer已满，将会返回 0 result。
             socketChannel.read(b, b, new Dispatcher(socketChannel));
