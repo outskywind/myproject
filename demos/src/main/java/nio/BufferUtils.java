@@ -1,7 +1,6 @@
 package nio;
 
 import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
 
 public class BufferUtils {
 	
@@ -20,7 +19,7 @@ public class BufferUtils {
 		
 		//字节流的编码是个问题呢
 		//return "";
-		
+        return "";
 	}
 
 }

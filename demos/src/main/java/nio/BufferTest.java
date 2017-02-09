@@ -4,11 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.CharBuffer;
 
-import oracle.sql.CharacterBuffer;
-
 import org.junit.Test;
-
-import sun.util.logging.resources.logging;
 
 public class BufferTest {
 	
