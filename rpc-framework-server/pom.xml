@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>qcy.rpc</groupId>
-		<artifactId>rpc-framework</artifactId>
+		<artifactId>myproject</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>rpc-framework-server</artifactId>
@@ -19,9 +19,6 @@
 			<artifactId>bootStrap</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
-
-
-
 	</dependencies>
 
 	<build>
@@ -53,33 +50,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<!-- <plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-shade-plugin</artifactId>
-				<version>2.4.3</version>
-				<executions>
-					<execution>
-						<phase>package</phase>
-						<goals>
-							<goal>shade</goal>
-						</goals>
-						<configuration>
-
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<manifestEntries>
-										<Main-Class>org.sonatype.haven.ExodusCli</Main-Class>
-									</manifestEntries>
-								</transformer>
-							</transformers>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin> -->
-
 		</plugins>
 	</build>
-
 </project>
