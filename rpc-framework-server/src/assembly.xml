@@ -34,9 +34,7 @@
 		<dependencySet>
 			<unpack>false</unpack>
 			<scope>runtime</scope>
-			<excludes>
-				<exclude>qcy.rpc:rpc-framework-server</exclude>
-			</excludes>
+			<useProjectArtifact>false</useProjectArtifact>
 			<outputDirectory>/</outputDirectory>
 		</dependencySet>
 		<dependencySet>

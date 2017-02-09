@@ -42,6 +42,7 @@ public class BootStrapServer {
             sbp.channel(NioServerSocketChannel.class);
             // 在这里添加socketChannel 的handler,将会在SocketChannel上的事件发生后被调用
             // 处理SocketChannel上的读与写事件
+            // 他是单例的
             sbp.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel ch) throws Exception {
