@@ -2,15 +2,23 @@ package qcy.rpc.server;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.channels.AsynchronousChannelGroup;
+import java.nio.ByteBuffer;
 import java.nio.channels.AsynchronousServerSocketChannel;
 import java.nio.channels.AsynchronousSocketChannel;
+import java.nio.channels.CompletionHandler;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+
+import sun.nio.ch.DirectBuffer;
 
 public class NativeNioServer {
 
-
+    /**
+     * NIO2 其实是AIO,与之前的NIO机制不一样 这个是proactor模式; NIO 1 是reactor 模式
+     * 
+     * @param port
+     */
     public void start(int port) {
         
         //1. server socket channel,Nio2
@@ -26,19 +34,110 @@ public class NativeNioServer {
             // 异步任务类型使用
             //AsynchronousChannelGroup workerGroup = AsynchronousChannelGroup
             //        .withThreadPool(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 - 1));
+            final ExecutorService executor =
+                    Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() * 2 - 1);
 
             while (true) {
                 // create connection asynchronously
-                Future<AsynchronousSocketChannel> channel = serverChannel.accept();
-                //completion handler 将会与serverChannel 的 initiate thread 是同一个线程池调用
-                //高并发时，如果用户连接数高，那么将会耗尽线程池可用线程。导致新的连接请求无法响应
-                // serverChannel.accept(attachment, handler);
-                channel.get().
+                // completion handler 将会与serverChannel 的 initiate thread 是同一个线程池调用
+                // 高并发时，如果用户连接数高，那么将会耗尽线程池可用线程。导致新的连接请求无法响应
+                // 因此将在这里分配给worker线程池处理socketChannel的IO
+                serverChannel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Object>() {
+                    @Override
+                    public void failed(Throwable exc, Object attachment) {
+                    }
+                    @Override
+                    public void completed(AsynchronousSocketChannel result, Object attachment) {
+                        executor.submit(new SocketChannelEvent(result));
+                    }
+                });
             }
-
-
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    public class SocketChannelEvent implements Callable {
+        private AsynchronousSocketChannel socketChannel;
+        // private Selector socketSelector;
+
+        public SocketChannelEvent(AsynchronousSocketChannel channel) {
+            this.socketChannel = channel;
+            // this.socketSelector = socketSelector;
+        }
+
+        /**
+         * socket channel 的 Read/Write 处理
+         */
+        @Override
+        public Object call() throws Exception {
+            // implements the worker reactor; NIO2 异步通道
+            // 直接内存 不会由GC回收，切记切记，需要手动释放
+            // 而且分配时比较耗时，应该使用缓存的ByteBuffer 内存池。
+            // 8k大小，to be tuned , linux socket 默认socket buffer为8k
+            // -XX:MaxDirectMemorySize= 需要设置大小，默认为-Xmx相同
+            final ByteBuffer b = ByteBuffer.allocateDirect(8192);
+            DirectBuffer db;
+            // sun 的实现中，如果buffer已满，将会返回 0 result。
+            socketChannel.read(b, b, new Dispatcher(socketChannel));
+            return null;
+        }
+    }
+
+    // 分发处理业务,读取到ByteBuffer完成之后才回调 dispatcher处理
+    // Attention：java原生的NIO没有处理半包情况
+    public class Dispatcher implements CompletionHandler<Integer, ByteBuffer>
+    {
+        // channel操作写回用
+        private AsynchronousSocketChannel socketChannel;
+        // 8k的初始容量,扩充1.5倍
+        private byte[] request = new byte[8192];
+        private int tail = 0;
+
+        public Dispatcher(AsynchronousSocketChannel socketChannel) {
+            this.socketChannel = socketChannel;
+        }
+
+        /**
+         * socket is stream ,so the content bytes will come continually so the program should repeat
+         * reading until reach the end;
+         */
+        @Override
+        public void completed(Integer result, ByteBuffer attachment) {
+            try {
+                System.out.println("read resultCode:" + result);
+                attachment.flip();
+                byte[] bytes = attachment.array();
+                // 判断是否需要扩充
+                if (tail + bytes.length > request.length) {
+                    byte[] extend = new byte[(int) (request.length * 1.5)];
+                    System.arraycopy(request, 0, extend, 0, request.length);
+                    request = extend;
+                }
+                // append to request
+                System.arraycopy(bytes, 0, request, tail, bytes.length);
+                tail += bytes.length;
+                // -1 已经读取完成
+                while (result != -1) {
+                    System.out.println("result not -1:continue to read");
+                    attachment.clear();
+                    // continue to read to this dispatcher
+                    socketChannel.read(attachment, attachment, this);
+                }
+                // then go on, finished reading
+                System.out.println("this channel read finished resultCode:" + result);
+                System.out.println("read content:" + new String(request, "utf-8"));
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        @Override
+        public void failed(Throwable exc, ByteBuffer attachment) {
+            // TODO Auto-generated method stub
+
         }
 
     }
