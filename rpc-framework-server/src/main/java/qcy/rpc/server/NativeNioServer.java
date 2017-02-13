@@ -15,7 +15,8 @@ import qcy.rpc.buffer.DirectBufferPool;
 public class NativeNioServer {
 
     /**
-     * NIO2 其实是AIO,与之前的NIO机制不一样 这个是proactor模式; NIO 1 是reactor 模式
+     * NIO2 其实是AIO,与之前的NIO机制不一样 这个是proactor模式; NIO 1 是reactor 模式 linux 下的 AIO 并不是内核实现的，而是用户线程实现的
+     * posix aio , glibc 库实现的
      * 
      * @param port
      */
@@ -24,6 +25,7 @@ public class NativeNioServer {
         //1. server socket channel,Nio2
         try {
             // channel ,default reactor group[thread pool]
+            // 这个就是Acceptor
             AsynchronousServerSocketChannel serverChannel = AsynchronousServerSocketChannel.open();
             // bind InetSocketAddress, actually ,channel 就是socket 与 应用程序之间的通道。
             // channel 由绑定的socket端口，监听的事件，处理的线程组成。
@@ -42,6 +44,9 @@ public class NativeNioServer {
                 // completion handler 将会与serverChannel 的 initiate thread 是同一个线程池调用
                 // 高并发时，如果用户连接数高，那么将会耗尽线程池可用线程。导致新的连接请求无法响应
                 // 因此将在这里分配给worker线程池处理socketChannel的IO
+                // 默认的 AsynchronousChannelGroup 就是 completion dispatcher
+                // 这里与论文不一样，不是把Acceptor 自己作为 completionHandler 传递。,简化了一步
+                // 而是他创建出来的Http handler:[AsynchronousSocketChannel]
                 serverChannel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Object>() {
                     @Override
                     public void failed(Throwable exc, Object attachment) {
