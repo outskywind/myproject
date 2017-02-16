@@ -15,7 +15,8 @@ import qcy.rpc.buffer.DirectBufferPool;
 public class NativeNioServer {
 
     /**
-     * NIO2 其实是AIO,与之前的NIO机制不一样 这个是proactor模式; NIO 1 是reactor 模式 linux 下的 AIO 并不是内核实现的，而是用户线程实现的
+     * NIO2 其实是AIO,与之前的NIO机制不一样 这个是proactor模式; NIO 1 是reactor 模式 
+     * linux 下的 AIO 并不是内核实现的，而是用户线程实现的
      * posix aio , glibc 库实现的
      * 
      * @param port
