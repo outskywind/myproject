@@ -49,13 +49,13 @@ public class NativeNioServer {
                 // 这里与论文不一样，不是把Acceptor 自己作为 completionHandler 传递。,简化了一步
                 // 而是他创建出来的Http handler:[AsynchronousSocketChannel]
                 serverChannel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Object>() {
-                    @Override
-                    public void failed(Throwable exc, Object attachment) {
-                    }
-                    @Override
+                	@Override
                     public void completed(AsynchronousSocketChannel result, Object attachment) {
                         executor.submit(new SocketChannelEvent(result));
                     }
+					@Override
+					public void failed(Throwable exc, Object attachment) {
+					}
                 });
             }
         } catch (IOException e) {
