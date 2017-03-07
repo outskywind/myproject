@@ -1,9 +1,6 @@
 package concurrency.blockqueue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * 使用工厂模式解决
@@ -41,7 +38,7 @@ public class BlockedQueue<E> {
 	//阻塞队列的添加
 	private Object jok =  new Object();
 	{
-		this.jok.equals(obj);
+        this.jok.equals(null);
 	}
 	
 	{
