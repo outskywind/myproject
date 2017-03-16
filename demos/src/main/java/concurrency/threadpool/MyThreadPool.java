@@ -51,6 +51,8 @@ public class MyThreadPool {
 
 
     public MyThreadPool() {
+        // t_cpu+t_io = Nthread*t_cpu
+        // Ncpu核数，考虑的是此时同时终止，那么就需要Nthread*t_cpu*Ncpu
         this(2, Runtime.getRuntime().availableProcessors() * 10);
         ExecutorService service = Executors.newFixedThreadPool(10);
     }
