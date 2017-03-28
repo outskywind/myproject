@@ -21,6 +21,7 @@ public class BasicGramma {
         aa =(short) (aa + 100000000);
         
         short cc = aa;
+
     }
 
 }
