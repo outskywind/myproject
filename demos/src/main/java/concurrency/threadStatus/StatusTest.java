@@ -11,8 +11,20 @@ public class StatusTest {
 	
 	
 	
+	//countdownlatch cyllicbarrier
+	public static void main(String[] args){
+		
+		Calculator runnable = new Calculator(1);
+		for(int i=0;i<5;i++){
+			Thread t = new Thread(runnable,"ruunable-"+i);
+		}
+		
+	}
 	
-	private class Calculator implements Runnable{
+	
+	
+	
+	private static class Calculator implements Runnable{
 		int i;
 		
 		public Calculator(int calculator){

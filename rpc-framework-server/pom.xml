@@ -19,11 +19,18 @@
 			<artifactId>bootStrap</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.apache.zookeeper</groupId>
+			<artifactId>zookeeper</artifactId>
+			<version>3.4.9</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
 		<plugins>
-
+			<!-- fat jar包 -->
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>3.0.0</version>
