@@ -37,7 +37,7 @@ public class InputStreamDecorator {
 	public void testUTF8(){
 		//java  内存中字符是用unicode 字符集的 2字节
 		// unicode字符集编码成utf-8时，一般会变长
-		char ch2 = '𠣗'; //哈哈，如果这个字符unicode二进制码值超过了 2字节范围，那么用char表示还是会报错的
+		//char ch2 = '𠣗'; //哈哈，如果这个字符unicode二进制码值超过了 2字节范围，那么用char表示还是会报错的
 		String ch3 = "再";//java 内存中是unicode编码
 		char ch = '一';
 		int chh =ch;

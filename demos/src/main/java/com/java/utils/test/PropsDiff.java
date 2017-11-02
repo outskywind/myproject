@@ -38,7 +38,7 @@ public class PropsDiff {
 			}
 		}
 		
-		if(diffs.isEmpty()) System.out.println("配置项key值相同");
+		if(diffs.isEmpty()) System.out.println("");
 		
 	}
 	
