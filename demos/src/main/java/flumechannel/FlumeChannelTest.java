@@ -48,17 +48,17 @@ public class FlumeChannelTest {
             channel.put(e);
         }
         tx.commit();
-        tx.close();
+        //tx.close();
         //after spilled ,we get take it again;
-        Event e = null;
-        tx = channel.getTransaction();
-        tx.begin();
-        while((e=channel.take())!=null){
+        //Event e = null;
+        //tx = channel.getTransaction();
+        //tx.begin();
+        //while((e=channel.take())!=null){
             //Event e = channel.take();
-            System.out.println(mapper.readValue(e.getBody(),Map.class));
-        }
-        tx.commit();
-        tx.close();
+        //    System.out.println(mapper.readValue(e.getBody(),Map.class));
+        //}
+        //tx.commit();
+        //tx.close();
         channel.stop();
         System.currentTimeMillis();
     }

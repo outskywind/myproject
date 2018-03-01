@@ -10,9 +10,10 @@
 		<module>rpc-framework-server</module>
 		<module>bootStrap</module>
 		<module>demos</module>
-    <module>rpc-framework-client</module>
-    <module>springclassload</module>
-    </modules>
+    	<module>rpc-framework-client</module>
+    	<module>springclassload</module>
+		<module>springboot-project-quick-template</module>
+	</modules>
 
 
 	<dependencies>

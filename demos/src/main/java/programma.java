@@ -1,3 +1,4 @@
+import org.junit.Test;
 
 public class programma {
 
@@ -29,4 +30,12 @@ public class programma {
 		 System.out.println(str);
 		 
 	 }
+	 @Test
+	 public void testR(){
+	 	String str = "中国平安\n" +
+				"保险股份有限公司深圳分公司";
+
+	 	System.out.println(str.replaceAll("\n"," "));
+	 }
+
 }

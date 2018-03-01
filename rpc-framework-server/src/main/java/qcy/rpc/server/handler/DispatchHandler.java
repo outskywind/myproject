@@ -20,6 +20,8 @@ public class DispatchHandler extends ChannelInboundHandlerAdapter {
         if (msg instanceof FullHttpRequest) {
             FullHttpRequest request = (FullHttpRequest) msg;
             logger.info("context channelRead() invoked,recevied msg is {}", request.content());
+
+
         }
 
     }

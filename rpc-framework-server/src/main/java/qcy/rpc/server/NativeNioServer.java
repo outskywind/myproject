@@ -50,7 +50,7 @@ public class NativeNioServer {
                 // 而是他创建出来的Http handler:[AsynchronousSocketChannel]
                 serverChannel.accept(null, new CompletionHandler<AsynchronousSocketChannel, Object>() {
                 	@Override
-                    public void completed(AsynchronousSocketChannel result, Object attachment) {
+                    public void completed(final AsynchronousSocketChannel result, final Object attachment) {
                         executor.submit(new SocketChannelEvent(result));
                     }
 					@Override
