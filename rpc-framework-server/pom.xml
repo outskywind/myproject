@@ -38,7 +38,7 @@
 					<appendAssemblyId>false</appendAssemblyId>
 					<archive>
 						<manifest>
-							<mainClass>qcy.core.bootStrap.BootStrapLoader</mainClass>
+							<mainClass>org.qcy.boot.BootStrapLoader</mainClass>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix></classpathPrefix>
 						</manifest>

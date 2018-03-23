@@ -39,12 +39,9 @@ public class BootLuancher {
             URL resource0 =
                     BootLuancher.class.getClassLoader().getResource("libs/spring-core-4.3.8.RELEASE.jar");
             System.out.println(resource0);
-            URL resource1 =
-                    BootLuancher.class.getClassLoader().getResource("libs/spring-core-4.3.8.RELEASE.jar/META-INF/license.txt");
-            System.out.println(resource1);
 
             Enumeration<URL> resources = BootLuancher.class.getClassLoader().getResources(directory);
-            Set<URL> results  =new LinkedHashSet<URL>(16);
+            Set<URL> results  = null;
             while(resources.hasMoreElements()){
                 URL resource = resources.nextElement();
                 //

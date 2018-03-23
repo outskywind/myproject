@@ -1,4 +1,4 @@
-package qcy.core.bootStrap;
+package org.qcy.boot;
 
 
 public class URLStreamHandlerFactory implements java.net.URLStreamHandlerFactory {

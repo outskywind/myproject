@@ -1,4 +1,4 @@
-package qcy.core.bootStrap;
+package org.qcy.boot;
 
 import java.io.IOException;
 import java.net.URL;
@@ -14,8 +14,8 @@ public class URLStreamHandler extends java.net.URLStreamHandler {
     }
 
     @Override
-    protected URLConnection openConnection(URL u) throws IOException {
-        return new URLConnection(u, this.classLoader);
+    protected ClassPathURLConnection openConnection(URL u) throws IOException {
+        return new ClassPathURLConnection(u, this.classLoader);
     }
 
     @Override
@@ -23,8 +23,8 @@ public class URLStreamHandler extends java.net.URLStreamHandler {
         String file;
         // url = injar
         // spec = injar:spring-context-4.3.4.RELEASE.jar
-        System.out.println("url=" + url);
-        System.out.println("spec=" + spec);
+        //System.out.println("url=" + url);
+        //System.out.println("spec=" + spec);
         if (spec.startsWith("injar:")) {
             file = spec.substring(6);
         } else {
@@ -38,7 +38,7 @@ public class URLStreamHandler extends java.net.URLStreamHandler {
                 }
             }
         }
-        System.out.println("parseURL file=" + file);
+        //System.out.println("parseURL file=" + file);
         setURL(url, "injar", "", -1, null, null, file, null, null);
     }
 
