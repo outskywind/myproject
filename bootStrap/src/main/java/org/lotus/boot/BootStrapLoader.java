@@ -1,4 +1,4 @@
-package org.qcy.boot;
+package org.lotus.boot;
 
 import java.lang.reflect.Method;
 import java.net.URL;
@@ -22,14 +22,18 @@ public class BootStrapLoader {
     // 不能依赖任何第三方jar包
     public static void main(String[] args) {
         try {
+            /**
+             * https://docs.oracle.com/javase/8/docs/technotes/guides/lang/resources.html
+             *
+             * The methods in ClassLoader use the given String as the name of the resource without applying any absolute/relative transformation
+             * (see the methods in Class). The name should not have a leading "/".
+             *
+             * 此外 以 / 结尾的都将当做目录对待，否则都将当做jar文件对待
+             */
             //让system class loader 获取资源，用自定义的类加载器加载应用，如果没有父类加载器
             //就是继承自Ext class loader
             ClassLoader appLoader = Thread.currentThread().getContextClassLoader();
             // 使用的是jar包classPath相对路径
-            //Manifest mf = new Manifest(appLoader.getResourceAsStream("META-INF/MANIFEST.MF"));
-            //Attributes attr = mf.getMainAttributes();
-            //String files = attr.getValue("Class-Path");
-            //String[] cps = splitSpaces(files);
             String directory = LIBS_RESOURCE_PATH.substring(LIBS_RESOURCE_PATH_PREFIX.length(),LIBS_RESOURCE_PATH.lastIndexOf("/")+1);
             Enumeration<URL> resources = BootStrapLoader.class.getClassLoader().getResources(directory);
             Set<String> classpathResources  = null;
@@ -53,29 +57,16 @@ public class BootStrapLoader {
                 //普通的spec 如果不以/结尾，那么也会被当做jar URL 加载
                 //那么这个 URL 输入流就会被当做 Jar的输入流加载，然后解压到临时目录解析
                 URL base = new URL("injar:"+url);
-                //URL base2 =  new URL("jar:injar:"+url+"!/");
-                //System.out.println("the init base2 url=" +base2+" & file="+base2.getFile());
-                //URL class_ = new URL(base,SPRING_APP.replace('.', '/').concat(".class"));
-                //URLClassPath ucp = new URLClassPath(new URL[]{base});
-                //ucp.getResource(SPRING_APP.replace('.', '/').concat(".class"),false);
-                //System.out.println("url.tostring()="+base);
-                //URL jarURL = new URL("jar", "", -1, base + "!/", null);
-                //URLConnection jarConn  = jarURL.openConnection();
-                //JarFile jarFile = ((JarURLConnection)jarConn).getJarFile();
-                //System.out.println(jarFile);
-                //System.out.println(base.toString());
                 classLoadURL.add(base);
             }
             URLClassLoader loader = new URLClassLoader(classLoadURL.toArray(new URL[classLoadURL.size()]), null,new URLStreamHandlerFactory(appLoader));
-            //URLClassLoader loader = new URLClassLoader((new URL[]{new URL("jar:injar:libs/spring-boot-1.5.3.RELEASE.jar!/")}), null);
             // 设置到当前上下文加载器
             Thread.currentThread().setContextClassLoader(loader);
             // start the real main Method
-            // String mainClass = attr.getValue("Main-Class");
-            System.out.println(ClassLoader.getSystemClassLoader());
+            // System.out.println(ClassLoader.getSystemClassLoader());
             Class<?> mainClazz = Class.forName(SPRING_APP, true, loader);
-            // mainClazz.newInstance();
             Method mainMethod = mainClazz.getMethod("main", new Class[] {args.getClass()});
+            //JVM 解析会把数组拆成一个个对象
             mainMethod.invoke(null, new Object[] {args});
         } catch (Exception e) {
             e.printStackTrace();

@@ -3,11 +3,11 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>qcy.rpc</groupId>
-    <artifactId>myproject</artifactId>
+    <groupId>org.lotus</groupId>
+    <artifactId>parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>qcy.rpc</groupId>
+  <groupId>org.lotus</groupId>
   <artifactId>rpc-framework-client</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>rpc-framework-client</name>

@@ -1,4 +1,4 @@
-package org.qcy.boot;
+package org.lotus.boot;
 
 
 public class URLStreamHandlerFactory implements java.net.URLStreamHandlerFactory {

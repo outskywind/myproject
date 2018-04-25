@@ -3,8 +3,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>qcy.rpc</groupId>
-    <artifactId>myproject</artifactId>
+    <groupId>org.lotus</groupId>
+    <artifactId>parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
@@ -18,7 +18,7 @@
   <dependencies>
 
     <dependency>
-      <groupId>qcy.rpc</groupId>
+      <groupId>org.lotus</groupId>
       <artifactId>springboot-project-quick-template</artifactId>
       <version>0.0.1-SNAPSHOT</version>
     </dependency>
@@ -48,7 +48,7 @@
           <!-- MainClass in mainfest make a executable jar -->
           <archive>
             <manifest>
-              <mainClass>org.qcy.boot.BootStrapLoader</mainClass>
+              <mainClass>org.lotus.boot.BootStrapLoader</mainClass>
             </manifest>
           </archive>
         </configuration>

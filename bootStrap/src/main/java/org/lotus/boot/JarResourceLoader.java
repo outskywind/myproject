@@ -1,4 +1,4 @@
-package org.qcy.boot;
+package org.lotus.boot;
 
 
 import java.net.JarURLConnection;
@@ -24,10 +24,9 @@ public class JarResourceLoader {
      * @return
      * @throws Exception
      */
-    public static Set<URL> getResouceUrls(URL jarURL, String subPattern) throws Exception{
+    public static Set<String> getClasspathResourceUrls(URL jarURL, String subPattern) throws Exception{
 
-
-        Set<URL> result = new LinkedHashSet<URL>(16);
+        Set<String> result = new LinkedHashSet<String>(16);
         URLConnection con = jarURL.openConnection();
         JarFile jarFile = null;
 
@@ -52,10 +51,10 @@ public class JarResourceLoader {
             for (Enumeration<JarEntry> entries = jarFile.entries(); entries.hasMoreElements();) {
                 JarEntry entry = entries.nextElement();
                 String entryPath = entry.getName();
-                //这是啥意思？本来就肯定是root开头的吧
-                if (entryPath.startsWith(rootEntryPath)) {
-                    String relativePath = entryPath.substring(rootEntryPath.length());
-                    result.add(new URL(jarURL,relativePath));
+                if (entryPath.startsWith(rootEntryPath) && entryPath.endsWith(subPattern)) {
+                    //String relativePath = entryPath.substring(rootEntryPath.length());
+                    System.out.println("classpath = "+entryPath);
+                    result.add(entryPath);
                 }
             }
         }

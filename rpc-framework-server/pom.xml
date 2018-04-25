@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>qcy.rpc</groupId>
-		<artifactId>myproject</artifactId>
+		<groupId>org.lotus</groupId>
+		<artifactId>parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
 	<artifactId>rpc-framework-server</artifactId>
@@ -15,7 +15,7 @@
 			<version>4.3.4.RELEASE</version>
 		</dependency>
 		<dependency>
-			<groupId>qcy.rpc</groupId>
+			<groupId>org.lotus</groupId>
 			<artifactId>bootStrap</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
@@ -38,7 +38,7 @@
 					<appendAssemblyId>false</appendAssemblyId>
 					<archive>
 						<manifest>
-							<mainClass>org.qcy.boot.BootStrapLoader</mainClass>
+							<mainClass>org.lotus.boot.BootStrapLoader</mainClass>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix></classpathPrefix>
 						</manifest>

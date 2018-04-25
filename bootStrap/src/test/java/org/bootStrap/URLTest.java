@@ -4,7 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import org.junit.Test;
-import org.qcy.boot.URLStreamHandlerFactory;
+import org.lotus.boot.URLStreamHandlerFactory;
 
 public class URLTest {
 
