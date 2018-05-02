@@ -1,10 +1,9 @@
-package qcy.rpc.spring;
+package org.lotus.spring;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.UrlResource;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.Enumeration;
 
@@ -30,6 +29,6 @@ public class BootStrap {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //SpringApplication.run(BootStrap.class);
+        SpringApplication.run(BootStrap.class);
     }
 }

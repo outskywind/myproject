@@ -101,6 +101,7 @@
         </dependency>
         <!--  spring boot 里配置的是optional 依赖，因此本项目不会打包web依赖，但是SpringApplication 会报错
               this is ugly -->
+        <!--
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-web</artifactId>
@@ -109,6 +110,7 @@
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
+        -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
