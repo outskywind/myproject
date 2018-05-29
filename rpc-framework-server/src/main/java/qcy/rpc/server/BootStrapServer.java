@@ -31,7 +31,7 @@ public class BootStrapServer {
 
         // 一个 serverChannel 难道不是应该由一个Loop线程使用么
         // 否则就要加锁，控制并发，降低性能？
-        NioEventLoopGroup boss = new NioEventLoopGroup(1);
+        NioEventLoopGroup boss = new NioEventLoopGroup(1);  //这个就是事件分发线程 reactor
         NioEventLoopGroup worker = new NioEventLoopGroup();
         try {
             // 启动server
@@ -43,7 +43,7 @@ public class BootStrapServer {
             // 在这里添加socketChannel 的handler,将会在SocketChannel上的事件发生后被调用
             // 处理SocketChannel上的读与写事件
             // Handler是单例的
-            // 在NioServerSocketChannel 读取连接请求后，创建一个sockeChannel ，再调用它上面的处理者 ServerBootstrapAcceptor ；
+            // 在NioServerSocketChannel 读取连接请求后，创建一个socketChannel ，再调用它上面的处理者 ServerBootstrapAcceptor ；
             //  {@link ServerBootstrapAcceptor} 将执行   child.pipeline().addLast(childHandler); 把这里注册的childHandler 注册到每一个socketChannel上
             //  childGroup.register(child);并且将socketChannel绑定到worker线程组
             
@@ -57,7 +57,9 @@ public class BootStrapServer {
             });
             sbp.option(ChannelOption.SO_BACKLOG, 128);
             sbp.childOption(ChannelOption.SO_KEEPALIVE, true);
-            // 监听端口
+
+            // 监听端口，这里启动reactor线程，只有一个，其实应该设置cpu多个？高级网卡队列应该是支持多cpu的
+            //
             ChannelFuture cf = sbp.bind(this.port);
             logger.info("启动成功... on port:{}", this.port);
             ChannelFuture closeFuture = cf.sync();

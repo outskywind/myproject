@@ -12,7 +12,8 @@
     	<module>rpc-framework-client</module>
 		<module>springboot-project-quick-template</module>
 		<module>spring-boot-autoconfig-configcenter</module>
-	</modules>
+        <module>file-recovery-storage</module>
+    </modules>
 
 
 	<dependencyManagement>

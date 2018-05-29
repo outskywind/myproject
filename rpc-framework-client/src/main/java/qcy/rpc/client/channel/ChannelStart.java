@@ -26,11 +26,11 @@ public class ChannelStart {
     /**
      * 创建指定的server channel
      * 
-     * @param ip
+     * @param host
      * @param port
      * @throws InterruptedException
      */
-    public void syncChannel(String host, int port) throws InterruptedException {
+    public ChannelFuture newChannel(String host, int port) throws InterruptedException {
         // 设置worker工作线程
         NioEventLoopGroup worker = new NioEventLoopGroup(WORKER_THREADS);
         try {
@@ -41,16 +41,14 @@ public class ChannelStart {
             bs.remoteAddress(host, port);
             // this will block
             ChannelFuture f = bs.connect().sync();
-
-            f.channel().closeFuture().sync();
+            return f;
         } catch (Exception e) {
             logger.error("syncChannel Exception:", e);
         }finally{
             // 关闭是关闭线程池
-            worker.shutdownGracefully().sync();
+            //worker.shutdownGracefully().sync();
         }
+        return null;
     }
-
-
 
 }

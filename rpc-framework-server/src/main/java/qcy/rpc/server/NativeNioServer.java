@@ -43,7 +43,7 @@ public class NativeNioServer {
             while (true) {
                 // create connection asynchronously
                 // completion handler 将会与serverChannel 的 initiate thread 是同一个线程池调用
-                // 高并发时，如果用户连接数高，那么将会耗尽线程池可用线程。导致新的连接请求无法响应
+                // 高并发时，如果用户连接数高，那么将会耗尽线程池可用线程。导致无法及时接收新的连接请求
                 // 因此将在这里分配给worker线程池处理socketChannel的IO
                 // 默认的 AsynchronousChannelGroup 就是 completion dispatcher
                 // 这里与论文不一样，不是把Acceptor 自己作为 completionHandler 传递。,简化了一步
