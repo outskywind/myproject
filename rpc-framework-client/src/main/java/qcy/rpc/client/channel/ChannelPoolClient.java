@@ -1,5 +1,8 @@
 package qcy.rpc.client.channel;
 
+import io.netty.channel.socket.nio.NioSocketChannel;
+
+import java.util.Map;
 import java.util.concurrent.Future;
 
 /**
@@ -10,7 +13,9 @@ public class ChannelPoolClient {
     //since Nio channel is not  thread safe ,it's bounded the one specific selector if there has multiple selector
     //e.g multiple  NioEventLoop
 
-    public Future send(){
+    Map<String,NioSocketChannel> channelPartition;
+
+    public Future send(String host, String body){
         return null;
     }
 
