@@ -5,7 +5,6 @@ package algorithm.sort;
  */
 public class HeapSort {
 
-
     public static void main(String[] args){
         int[] array = new int[]{3,1,6,5,4,7,9,11,8,12,15,2};
         heap_sort(array);
@@ -14,8 +13,6 @@ public class HeapSort {
             System.out.print(array[i]+",");
         }
     }
-
-
 
     //这里的时间复杂度为 子树的高度
     private static void max_heapify(int[] array , int root , int heap_size){
@@ -41,7 +38,7 @@ public class HeapSort {
 
     //build-max 的时间复杂度为 O(n)
     //证明对于height  h 的节点数，因为 N(h) <= n/2^h+1
-    //累加时间复杂度 ∑n/2^h+1*O(h) =n∑h/2^h+1,累加和极限是一个常量收敛，所以是O(n)
+    //累加时间复杂度 ∑n/2^(h+1)*O(h) =n∑h/2^h+1,累加和极限是一个常量收敛，所以是O(n)
     private static void build_max(int[] array){
         //对于构建一个最大堆，从所有的非叶子节点开始,-1 是因为下标从0开始
         int tail = (int)Math.floor(array.length/2.0)-1;
@@ -50,6 +47,8 @@ public class HeapSort {
         }
     }
 
+    //heap_sort 观察：对于根节点，要迭代N/2次lgN的max_heapify
+    //所以总时间复杂度为 O(NlgN)
     private static void heap_sort(int[] array ){
         //first build max heap
         build_max(array);
@@ -65,8 +64,6 @@ public class HeapSort {
         //结果是升序排列
     }
 
-
-
     private static int left(int root){
         //因为java中下标从0开始
         int left = (root<<1)+1;//优先级问题 + 号优先级比 << 高
@@ -77,6 +74,5 @@ public class HeapSort {
         int right = (root<<1)+2;
         return right;
     }
-
 
 }
