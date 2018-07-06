@@ -1,5 +1,7 @@
 package algorithm.sort;
 
+import java.util.Random;
+
 /**
  * Created by quanchengyun on 2018/7/5.
  */
@@ -14,8 +16,24 @@ public class QuickSort {
         }
     }
 
+    //随机选择划分值以达到期望时间复杂度 NlgN
+    private static void random_sort(int[] array,int start,int end){
+        if(start<end){
+            int p = random_partition(array,start,end);
+            sort(array,start,p-1);
+            sort(array,p+1,end);
+        }
+    }
+
+    //随机抽样法
+    private static int random_partition(int[] array,int start,int end){
+        int random_p = new Random(System.currentTimeMillis()).nextInt(end-start);
+        swap(array, start+random_p,end);
+        return partition(array,start,end);
+    }
+
     //可是使用递归有个问题，栈使用的内存比较多
-    private static void sort(int[] array,int start,int end){
+    public static void sort(int[] array,int start,int end){
         if(start<end){
             int p = partition(array,start,end);
             sort(array,start,p-1);
@@ -35,7 +53,7 @@ public class QuickSort {
         return i+1;
     }
 
-    public static void swap(int[] array, int src,int dest){
+    private static void swap(int[] array, int src,int dest){
         int tmp = array[src];
         array[src] = array[dest];
         array[dest] = tmp;
