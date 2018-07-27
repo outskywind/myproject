@@ -13,6 +13,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -54,10 +55,11 @@ public class ConfigCenterImportApplicationListener implements EnvironmentPostPro
                 if(resource!=null){
                     try{
                         YamlPropertySourceLoader yamlPropertySourceLoader = new YamlPropertySourceLoader();
-                        String[] profiles = environment.getActiveProfiles();
-                        for(String profile:profiles){
-                            PropertySource propertySource = yamlPropertySourceLoader.load(ENVIRONMENT_NAME,loader.getResource(resourceUrl),profile);
-                        }
+                        List<PropertySource<?>> propertySource = yamlPropertySourceLoader.load(ENVIRONMENT_NAME,resource);
+                        //String[] profiles = environment.getActiveProfiles();
+                        //for(String profile:profiles){
+
+                        //}
                     }catch (IOException e){
                         throw new RuntimeException("load configCenter failed");
                     }

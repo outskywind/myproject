@@ -1,0 +1,25 @@
+
+
+# Spring boot application
+spring.application.name: dubbo-provider-demo
+server.port: 9090
+management.port: 9091
+
+# Dubbo Config properties
+## ApplicationConfig Bean
+## ProtocolConfig Bean
+dubbo:
+  scan:
+    basePackages: frameworkDemo.dubbo
+  application:
+    id: dubbo-provider-demo
+    name: dubbo-provider-demo
+  registry:
+    id: demo
+    address: zookeeper://zookeeper1.dafy.com:2181
+    client: curator
+  protocol:
+    id: dubbo
+    name: dubbo
+    port: 12345
+    transporter: netty4

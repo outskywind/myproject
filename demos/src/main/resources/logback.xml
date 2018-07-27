@@ -11,7 +11,7 @@
 			<pattern>%-20(%d{HH:mm:ss.SSS} [%thread]) %-5level [%X{braveTraceId}] %logger{80}:%line - %msg%n</pattern>
 		</encoder>
 	</appender>
-	<appender name="file"
+	<!--<appender name="file"
 			  class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>/opt/logs/data-platform/${PROJECT_NAME}/${PROJECT_NAME}.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
@@ -21,9 +21,9 @@
 		<encoder>
 			<pattern>%-20(%d{HH:mm:ss.SSS} [%thread]) %-5level [%X{braveTraceId}] %logger{80}:%line - %msg%n</pattern>
 		</encoder>
-	</appender>
+	</appender>-->
 
-	<root level="info">
+	<root level="debug">
 		<appender-ref ref="console" />
 	</root>
 </configuration>

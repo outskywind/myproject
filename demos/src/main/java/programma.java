@@ -38,4 +38,18 @@ public class programma {
 	 	System.out.println(str.replaceAll("\n"," "));
 	 }
 
+	 @Test
+	public void testX(){
+	 	int key = 10;
+	 	switch (key){
+			case 1:
+				//continue; //continue 只能在循环里使用
+			case 2:
+				break;
+			default:
+		}
+	 	System.out.println();
+	 }
+
+
 }
