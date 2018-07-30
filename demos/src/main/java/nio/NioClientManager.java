@@ -1,5 +1,6 @@
 package nio;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +12,7 @@ public class NioClientManager {
     Map<String,NioClient> clients=new HashMap<>();
 
     // protocol://server:port/resource_path
-    public Object sendRequest(String protocol,String host ,String path, Object obj) {
+    public Object sendRequest(String protocol,String host ,String path, Object obj) throws IOException {
         NioClient client = getClient(host);
         if(client==null){
             throw new IllegalStateException("can't get nio client");

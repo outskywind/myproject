@@ -4,6 +4,7 @@ import java.util.Random;
 
 /**
  * Created by quanchengyun on 2018/7/5.
+ * 原址排序，非稳定
  */
 public class QuickSort {
 

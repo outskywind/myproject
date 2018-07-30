@@ -56,18 +56,18 @@ public class SortUtil implements Serializable{
 	}
 	
 	public static void mergeSort() {
-		merge(array,0,array.length-1);
+		merge_sort(array,0,array.length-1);
 	}
 	
-	private static void merge(int[] array,int start,int end) {
+	private static void merge_sort(int[] array,int start,int end) {
 		if(end<=start) {
 			return ;
 		}
 		//end-start 对于key+1,end来说会越来越大
 		int key = (int)Math.ceil((end+start)/2);
-		
-		merge(array, start,key);
-		merge(array, key+1,end);
+
+		merge_sort(array, start,key);
+		merge_sort(array, key+1,end);
 		
 		//合并
 		int length = end-start+1;

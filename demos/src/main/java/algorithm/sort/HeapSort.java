@@ -2,6 +2,7 @@ package algorithm.sort;
 
 /**
  * Created by quanchengyun on 2018/7/3.
+ * 原址排序，非稳定
  */
 public class HeapSort {
 
