@@ -30,7 +30,7 @@ public class RadixSort {
             return array;
         }
         //r = log(length)
-        int r =1;
+        int r =0;
         long length = array.length;
         while((length=length>>1)!=0){
             r++;
