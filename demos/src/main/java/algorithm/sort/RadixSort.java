@@ -47,11 +47,13 @@ public class RadixSort {
             rounds++;
         }
         int mask = (1<<r)-1;
-        for(;rounds>0;rounds--){
+        int clength = mask+1;
+        for(int m=0;m<rounds;m++){
             //from low bits start each time get r bits
-            int[] c = new int[mask+1];
+            int rm = r*m;
+            int[] c = new int[clength];
             for(int i=0;i<array.length;i++){
-                c[array[i] & mask] = c[array[i] & mask]+1;
+                c[(array[i] & mask)>>>rm] = c[(array[i] & mask)>>>rm]+1;
             }
             for(int i=1;i<c.length;i++){
                 c[i]= c[i]+c[i-1];
@@ -59,8 +61,9 @@ public class RadixSort {
             //get the new round array
             int[] sorted = new int[array.length];
             for(int i=array.length-1; i>=0;i--){
-                sorted[c[array[i] & mask]-1]=array[i];
-                c[array[i] & mask]--;
+                //java下标从0开始
+                sorted[c[(array[i] & mask)>>>rm]-1]=array[i];
+                c[(array[i] & mask)>>>rm]--;
             }
             array = sorted;
             mask = mask << r;
