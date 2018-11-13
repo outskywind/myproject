@@ -23,11 +23,13 @@ public class TimeStampConverter {
         Date d = cl.getTime();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-        Date d2 = new Date(1538179199998L);
-        System.out.println(sdf.format(d));
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
 
-        System.out.println(sdf.format(d2));
+        System.out.println(sdf.format(d));
+        //sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+        Date d3 = new Date(1541628159715L);
+        System.out.println(sdf.format(d3));
+        System.out.println(System.currentTimeMillis());
 
     }
 }

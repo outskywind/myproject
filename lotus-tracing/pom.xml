@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>lotus-parent</artifactId>
+        <groupId>org.lotus</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>lotus-tracing</artifactId>
+    <packaging>pom</packaging>
+    <modules>
+        <module>tracing-storage-elasticsearch</module>
+        <module>tracing-common</module>
+        <module>tracing-storage-druid</module>
+        <module>tracing-data-report</module>
+        <module>tracing-data-consume</module>
+        <module>tracing-storage-autoconfigure</module>
+    </modules>
+
+    <properties>
+        <zipkin.version>2.11.8</zipkin.version>
+    </properties>
+
+    <dependencies>
+        <!--   zipkin data  model  -->
+        <dependency>
+            <groupId>io.zipkin.zipkin2</groupId>
+            <artifactId>zipkin</artifactId>
+            <version>${zipkin.version}</version>
+        </dependency>
+        <!--   zipkin data  model end -->
+    </dependencies>
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF8</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

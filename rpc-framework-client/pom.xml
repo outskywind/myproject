@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.lotus</groupId>
-    <artifactId>parent</artifactId>
+    <artifactId>lotus-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <groupId>org.lotus</groupId>
@@ -16,7 +16,10 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <dependencies>
-
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-all</artifactId>
+    </dependency>
     <!--  slfj + logback -->
     <dependency>
       <groupId>org.slf4j</groupId>

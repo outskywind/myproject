@@ -39,6 +39,15 @@ public class programma {
 	 }
 
 	 @Test
+	 public void testFor(){
+
+	 	for(byte i=0;i<2;++i){
+	 		//最后一个语句是语句块执行完了才执行的
+			System.out.println(i);
+		}
+	 }
+
+	 @Test
 	public void testX(){
 	 	int key = 10;
 	 	switch (key){

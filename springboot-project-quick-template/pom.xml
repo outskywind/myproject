@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>parent</artifactId>
+        <artifactId>lotus-parent</artifactId>
         <groupId>org.lotus</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
@@ -101,7 +101,7 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-autoconfigure</artifactId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <!--  spring boot 里配置的是optional 依赖，因此本项目不会打包web依赖，但是SpringApplication 会报错
               this is ugly -->
@@ -115,6 +115,13 @@
             <artifactId>javax.servlet-api</artifactId>
         </dependency>
         -->
+        <!-- zk-client -->
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>4.0.1</version>
+        </dependency>
+        <!-- zk-client end -->
 
     </dependencies>
 

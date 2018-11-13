@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>lotus-tracing</artifactId>
+        <groupId>org.lotus</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>tracing-storage-elasticsearch</artifactId>
+    <packaging>jar</packaging>
+
+    <properties>
+        <elasticsearch.versin>6.1.1</elasticsearch.versin>
+    </properties>
+
+    <dependencies>
+
+        <!--  zipkin elasticsearch storage layer -->
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>transport</artifactId>
+            <version>${elasticsearch.versin}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <version>${elasticsearch.versin}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.plugin</groupId>
+            <artifactId>transport-netty4-client</artifactId>
+            <version>${elasticsearch.versin}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.zipkin.zipkin2</groupId>
+            <artifactId>zipkin-storage-elasticsearch</artifactId>
+            <version>${zipkin.version}</version>
+        </dependency>
+        <!--  zipkin elasticsearch storage layer end -->
+
+        <dependency>
+            <groupId>org.lotus</groupId>
+            <artifactId>IDGenerator</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+    </dependencies>
+
+
+</project>
