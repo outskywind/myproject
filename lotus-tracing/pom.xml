@@ -17,7 +17,7 @@
         <module>tracing-storage-druid</module>
         <module>tracing-data-report</module>
         <module>tracing-data-consume</module>
-        <module>tracing-storage-autoconfigure</module>
+        <module>tracing-data-consume-autoconfigure</module>
     </modules>
 
     <properties>
