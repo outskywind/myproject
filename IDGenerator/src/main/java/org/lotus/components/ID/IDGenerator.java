@@ -26,8 +26,8 @@ public class IDGenerator {
 
     public static long getId(){
         //取低41位
-        long timestap = System.currentTimeMillis()-START;
-        long new41bit = (timestap & MASK);
+        long timestamp = System.currentTimeMillis()-START;
+        long new41bit = (timestamp & MASK);
         //
         int v = (seqNo.getAndIncrement()&((1<<12)-1));
         return (new41bit<<MOV)+(workerId()<<12)+v;

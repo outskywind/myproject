@@ -21,7 +21,7 @@ public class DoubleBigDecimal {
         System.out.println(d1);
 
 
-        double avg_qps =div(1, 60,2);
+        double avg_qps =div(1, 60,4)*100;
         System.out.println(avg_qps);
     }
 
