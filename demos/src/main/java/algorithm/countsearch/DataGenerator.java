@@ -23,6 +23,7 @@ public class DataGenerator {
 
 
     public static void main(String[] args){
+        long  start = System.nanoTime();
         File f = new File(dataFile);
         if(!f.getParentFile().exists()){
             f.getParentFile().mkdir();
@@ -44,7 +45,8 @@ public class DataGenerator {
                 buffer = file.getChannel().map(FileChannel.MapMode.READ_WRITE,position,chunk_size*8);
                 LongBuffer lb = buffer.load().asLongBuffer();
                 for(int i=0; i<chunk_size;i++){
-                    lb.put(random.nextLong());
+                    long num = random.nextLong();
+                    lb.put(num<0?-num-1:num);
                 }
                 buffer.force();
                 buffer.clear();
@@ -52,6 +54,7 @@ public class DataGenerator {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.print("生成数据："+ (System.nanoTime() - start)/1000000+"ms");
     }
 
 }

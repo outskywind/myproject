@@ -22,6 +22,10 @@ public class BasicGramma {
         
         short cc = aa;
 
+
+
+        System.out.print(-(Long.MIN_VALUE+1)-1);
+
     }
 
 }
