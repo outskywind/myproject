@@ -2,6 +2,9 @@ package algorithm.bit;
 
 import org.junit.Test;
 
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+
 public class bitAlgorithm {
 	
 	@Test
@@ -31,6 +34,23 @@ public class bitAlgorithm {
 		
 		System.out.println(i);
 		
+	}
+
+
+	//一定要小心
+	static long mask32Bit  = (1L<<32)-1;
+
+	@Test
+	public void testsplit(){
+		long data = 4634123;
+		int high = (int)((data >>>32) & mask32Bit);
+		int low = (int)(data & mask32Bit);
+		IntBuffer dataBuff = ByteBuffer.allocate(8).asIntBuffer();
+		dataBuff.put(high).put(low);
+		dataBuff.flip();
+		//System.out.println(dataBuff.get()+" "+dataBuff.get());
+		System.out.println(data ==((((long)dataBuff.get())<<32)+dataBuff.get()));
+
 	}
 
 }
