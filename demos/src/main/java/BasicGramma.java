@@ -24,7 +24,9 @@ public class BasicGramma {
 
 
 
-        System.out.print(-(Long.MIN_VALUE+1)-1);
+        System.out.println(-(Long.MIN_VALUE+1)-1);
+
+        System.out.println(1200000*(2400000/1200000));
 
     }
 
