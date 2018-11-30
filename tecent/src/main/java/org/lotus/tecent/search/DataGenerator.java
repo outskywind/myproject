@@ -1,4 +1,4 @@
-package algorithm.countsearch;
+package org.lotus.tecent.search;
 
 import java.io.File;
 import java.io.FileNotFoundException;

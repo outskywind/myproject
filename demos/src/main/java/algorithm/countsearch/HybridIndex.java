@@ -7,11 +7,29 @@ import java.nio.IntBuffer;
 import java.nio.LongBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.*;
 
-public class HybridIndex {
 
+/**
+ * 时间复杂度分析，从分区的索引数据文件中检索一个key，需要 2次 Tio
+ * 从检索出的桶中数据大小n 因为是随机分布的，所以期望值为 N/index_item_num
+ * 设遍历一个内存元素为 Ta
+ * 因为有Ni个索引数据文件分片（假定Ni固定为100），T = 100*2Tio+ n*Ta = 100(2Tio+ N*Ta/index_item_num)
+ * 当 index_item_num 为固定值时，T1 是一个 O(N) 的线性关系
+ * 比较分析顺序遍历：
+ * 每次比较需要 N 次 ， 需要的磁盘Tio 次数假定为N的线性关系 cN
+ * 那么总时间为 T2 = N*Ta+cN*Tio = N(Ta+cTio)
+ *
+ * 当N->极限大时 lim(T1) = (100*Ta/index_item_num)N
+ *              lim(T2) = (Tc +cTio)N
+ *             lim(T1/T2)=(100/index_item_num)*Ta/(cTio+Ta) < (100/(index_item_num*c))*Ta/Tio ,通常 Ta <<< Tio
+ *             因此index_item_num*c=100时，即可达到远远小于T2的检索时间
+ */
+public class HybridIndex {
 
     static String  index_path = "d:/demos/index/";
     static int TOTAL = 100000000;
@@ -33,8 +51,6 @@ public class HybridIndex {
 
 
     MappedByteBuffer[] indexMbbs= new MappedByteBuffer[data_partition];
-
-    //MappedByteBuffer[] dataMbbs= new MappedByteBuffer[data_partition];
 
 
     ExecutorService executor = new ThreadPoolExecutor(0,2*Runtime.getRuntime().availableProcessors(),5, TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(100));
@@ -95,11 +111,8 @@ public class HybridIndex {
         for(int i=1;i<index_in_mem[k].count.length;i++){
             p.start[i]=p.start[i-1]+p.count[i-1];
         }
-        //int[] offsets = new int[index_in_mem[k].count.length*2];
         IntBuffer ib = indexMbb.asIntBuffer();
         for(int i=0;i<index_in_mem[k].count.length;i++){
-            //offsets[2*i] = p.start[i];
-            //offsets[2*i+1] = p.start[i];
             ib.put(p.start[i]).put(p.count[i]);
 
         }
@@ -165,11 +178,11 @@ public class HybridIndex {
     }
 
 
-    public int find(long v) throws Exception{
+    public int find(final long v) throws Exception{
         if(!this.isIndexed()){
             this.build();
         }
-        List<Future<Integer>> results = new ArrayList<>(data_partition);
+        List<Future<Integer>> results = new ArrayList<Future<Integer>>(data_partition);
         for(int i=0;i<data_partition;i++){
             final int p = i;
             final int key = indexKey(v);
@@ -214,12 +227,6 @@ public class HybridIndex {
         File f = new File(index_path+0);
         return f.exists();
     }
-
-    public boolean isDataGerated(){
-        File f = new File(DataGenerator.dataFile);
-        return f.exists();
-    }
-
 
 
 

@@ -1,15 +1,17 @@
 package algorithm.countsearch;
 
+/**
+ * 清理数据文件同时，需要清理test文件 和 索引文件
+ */
 public class TestRun {
 
     public static void main(String[] args) throws Exception{
         DataGenerator dataGenerator = new DataGenerator();
-        HybridIndex index = new HybridIndex();
-        if(!index.isDataGerated()){
+        if(!dataGenerator.isDataGerated()){
             dataGenerator.generate();
         }
-        //System.out.print(64-Long.numberOfLeadingZeros(1L<<50));
         long  start = System.nanoTime();
+        HybridIndex index = new HybridIndex();
         try{
             boolean pass = true;
             for(DataGenerator.KCounter k: dataGenerator.getTestNums()){
@@ -23,7 +25,7 @@ public class TestRun {
         }catch (Exception e){
             e.printStackTrace();
         }
-        System.out.print("查找耗时："+ (System.nanoTime() - start)/1000000+"ms");
+        System.out.print("查找100个数据耗时："+ (System.nanoTime() - start)/1000000+"ms");
     }
 
 }
