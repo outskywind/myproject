@@ -19,7 +19,9 @@ public class Index {
 
 
     static int TOTAL = 100000000;
-    static int chunk_size = 1000000 ;
+    static int  chunk_size = 1000000 ;
+
+    static int trip = TOTAL/chunk_size ;
 
     static int index_bucket_size = 8 ;
     static int index_item_num = TOTAL/index_bucket_size ;
@@ -134,11 +136,11 @@ public class Index {
         try {
             file = new RandomAccessFile(DataGenerator.dataFile,"r");
             MappedByteBuffer buffer=null;
-            for(int j=0;j<DataGenerator.trip;j++){
+            for(int j=0;j<trip;j++){
                 //each trip indexing 1M data
-                long[] data_chunk = new long[DataGenerator.chunk_size];
-                long position = j*DataGenerator.chunk_size*8;
-                buffer = file.getChannel().map(FileChannel.MapMode.READ_ONLY,position,DataGenerator.chunk_size*8);
+                long[] data_chunk = new long[chunk_size];
+                long position = j*chunk_size*8;
+                buffer = file.getChannel().map(FileChannel.MapMode.READ_ONLY,position,chunk_size*8);
                 LongBuffer lb = buffer.load().asLongBuffer().asReadOnlyBuffer();
                 lb.get(data_chunk);
                 indexing(data_chunk);

@@ -22,9 +22,7 @@ public class HybridIndex {
     static int index_item_num = TOTAL/index_bucket_CAPACITY ;
     static long index_bucket_DIV_FRACTION = Long.MAX_VALUE/index_item_num +1;
 
-    List<Long>[] bucketsInMem = new LinkedList[index_item_num];
-
-    static int data_partition = 100;
+    static int data_partition = TOTAL/chunk_size;
     static int data_start = index_item_num*8;
     Pt[] index_in_mem = new Pt[data_partition];
 
@@ -35,10 +33,11 @@ public class HybridIndex {
 
 
     MappedByteBuffer[] indexMbbs= new MappedByteBuffer[data_partition];
+
     //MappedByteBuffer[] dataMbbs= new MappedByteBuffer[data_partition];
 
 
-    ExecutorService executor = new ThreadPoolExecutor(1,2*Runtime.getRuntime().availableProcessors(),1, TimeUnit.MINUTES,new ArrayBlockingQueue<Runnable>(100));
+    ExecutorService executor = new ThreadPoolExecutor(0,2*Runtime.getRuntime().availableProcessors(),1, TimeUnit.MINUTES,new ArrayBlockingQueue<Runnable>(100));
 
     public void build() throws Exception {
         File f = new File(DataGenerator.dataFile);
@@ -54,9 +53,9 @@ public class HybridIndex {
             MappedByteBuffer buffer=null;
             for(int j=0;j<data_partition;j++){
                 //each trip indexing 1M data
-                long[] data_chunk = new long[DataGenerator.chunk_size];
-                long position = j*DataGenerator.chunk_size*8;
-                buffer = file.getChannel().map(FileChannel.MapMode.READ_ONLY,position,DataGenerator.chunk_size*8);
+                long[] data_chunk = new long[chunk_size];
+                long position = j*chunk_size*8;
+                buffer = file.getChannel().map(FileChannel.MapMode.READ_ONLY,position,chunk_size*8);
                 LongBuffer lb = buffer.load().asLongBuffer().asReadOnlyBuffer();
                 lb.get(data_chunk);
                 indexing(data_chunk,j);
@@ -77,6 +76,7 @@ public class HybridIndex {
         MappedByteBuffer dataMbb = getDataMBB(k,data_chunk.length);
         indexMbbs[k]=indexMbb;
         //内存构建
+        List<Long>[] bucketsInMem = new LinkedList[index_item_num];
         for(int i=0;i<data_chunk.length;i++){
             int key = indexKey(data_chunk[i]);
             if(bucketsInMem[key]==null){
@@ -104,16 +104,17 @@ public class HybridIndex {
 
         }
         LongBuffer lb = dataMbb.asLongBuffer();
+        int _count = 0;
         for(int i=0;i<bucketsInMem.length;i++){
             if(bucketsInMem[i]!=null){
                 Iterator<Long> it =bucketsInMem[i].iterator();
                 while(it.hasNext()){
                     try{
+                        _count++;
                         lb.put(it.next());
                     }catch (Exception e){
                         e.printStackTrace();
                     }
-
                 }
             }
         }
@@ -164,7 +165,7 @@ public class HybridIndex {
     }
 
 
-    private int find(long v) throws Exception{
+    public int find(long v) throws Exception{
         if(!this.isIndexed()){
             this.build();
         }
@@ -177,11 +178,16 @@ public class HybridIndex {
                 public Integer call() throws Exception {
                     int result = 0;
                     MappedByteBuffer indexMbb = indexMbbs[p];
-                    if(!indexMbb.isLoaded()){
+                    if(indexMbb==null){
+                        indexMbbs[p] = getIndexMBB(p);
+                        indexMbb = indexMbbs[p];
+                    }
+                    if( !indexMbb.isLoaded()){
                         indexMbb.load();
                     }
-                    int start = indexMbb.asIntBuffer().get(key*2);
-                    int count = indexMbb.asIntBuffer().get(key*2+1);
+                    IntBuffer intBuffer = indexMbb.asIntBuffer();
+                    int start = intBuffer.get(key*2);
+                    int count = intBuffer.get(key*2+1);
                     MappedByteBuffer dataMbb = fetchDataRecordMBB(p,start,count);
                     long[] data = new long[count];
                     dataMbb.asLongBuffer().get(data);
@@ -209,24 +215,13 @@ public class HybridIndex {
         return f.exists();
     }
 
-
-    public static void  main(String[]  args){
-        //System.out.print(64-Long.numberOfLeadingZeros(1L<<50));
-        long  start = System.nanoTime();
-        HybridIndex index = new HybridIndex();
-        try{
-            Random r = new Random();
-            for(int i=0;i<1;i++){
-                long v= r.nextLong();
-                v = v<0?-v-1:v;
-                System.out.println(v+" 出现次数："+index.find(v));
-            }
-
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        System.out.print("生成索引数据："+ (System.nanoTime() - start)/1000000+"ms");
+    public boolean isDataGerated(){
+        File f = new File(DataGenerator.dataFile);
+        return f.exists();
     }
+
+
+
 
 }
 

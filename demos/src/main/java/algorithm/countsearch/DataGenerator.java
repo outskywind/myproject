@@ -3,6 +3,7 @@ package algorithm.countsearch;
 import java.io.File;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.LongBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
@@ -13,15 +14,20 @@ import java.util.Random;
  */
 public class DataGenerator {
 
+    public  static String  dataFile = "d:/demos/data.dt";
+    public  static String  testFile = "d:/demos/test.dt";
 
-    public static String  dataFile = "d:/demos/data.dt";
+    public  int chunk_size = 1000000 ;
+    public  int trip = 100;
+    //100个检测数
+    public  KCounter[] testNums  = new KCounter[100];
 
+     class KCounter{
+        long number;
+        int count;
+    }
 
-    public static int chunk_size = 1000000 ;
-    public static int trip = 100;
-
-
-    public static void main(String[] args){
+    public void generate() throws IOException{
         long  start = System.nanoTime();
         File f = new File(dataFile);
         if(!f.getParentFile().exists()){
@@ -30,11 +36,7 @@ public class DataGenerator {
         if(f.exists()){
             return ;
         }
-        try {
-            f.createNewFile();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        f.createNewFile();
         try {
             RandomAccessFile file = new RandomAccessFile(dataFile,"rw");
             Random random = new Random();
@@ -45,7 +47,21 @@ public class DataGenerator {
                 LongBuffer lb = buffer.load().asLongBuffer();
                 for(int i=0; i<chunk_size;i++){
                     long num = random.nextLong();
-                    lb.put(num<0?-num-1:num);
+                    num = num<0?-num-1:num;
+                    lb.put(num);
+                    //for test
+                    for(int k=0;k<testNums.length;k++){
+                        if(testNums[k]==null){
+                            KCounter kCounter = new KCounter();
+                            kCounter.number = num;
+                            kCounter.count = 1;
+                            testNums[k]=kCounter;
+                            break;
+                        }
+                        if(testNums[k].number==num){
+                            testNums[k].count++;
+                        }
+                    }
                 }
                 buffer.force();
                 buffer.clear();
@@ -54,6 +70,19 @@ public class DataGenerator {
             e.printStackTrace();
         }
         System.out.print("生成数据："+ (System.nanoTime() - start)/1000000+"ms");
+
+        File tf = new File(testFile);
+        if(!tf.getParentFile().exists()){
+            f.getParentFile().mkdir();
+        }
+        if(tf.exists()){
+            tf.delete();
+        }
+        tf.createNewFile();
+        LongBuffer longBuffer = ByteBuffer.allocate(100*16).asLongBuffer();
+        for(KCounter test: testNums){
+            System.out.println(test.number+" count:"+test.count);
+        }
     }
 
 }
