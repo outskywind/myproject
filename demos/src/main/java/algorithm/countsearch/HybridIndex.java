@@ -37,7 +37,7 @@ public class HybridIndex {
     //MappedByteBuffer[] dataMbbs= new MappedByteBuffer[data_partition];
 
 
-    ExecutorService executor = new ThreadPoolExecutor(0,2*Runtime.getRuntime().availableProcessors(),1, TimeUnit.MINUTES,new ArrayBlockingQueue<Runnable>(100));
+    ExecutorService executor = new ThreadPoolExecutor(0,2*Runtime.getRuntime().availableProcessors(),5, TimeUnit.SECONDS,new ArrayBlockingQueue<Runnable>(100));
 
     public void build() throws Exception {
         File f = new File(DataGenerator.dataFile);
