@@ -18,7 +18,7 @@
 		<module>lotus-tracing</module>
 		<module>IDGenerator</module>
         <module>lotus-spring-autoconfigure</module>
-        <module>tecent</module>
+        <module>tencent</module>
     </modules>
 
 

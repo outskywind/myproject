@@ -12,4 +12,25 @@
     <artifactId>tencent</artifactId>
 
 
+    <build>
+        <plugins>
+            <!-- 必须将compiler插件在 aspectj之前运行，否则会覆盖  -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <compilerVersion>1.8</compilerVersion>
+                    <fork>true</fork>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <useIncrementalCompilation>false</useIncrementalCompilation>
+                </configuration>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+
 </project>
