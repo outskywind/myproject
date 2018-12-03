@@ -1,4 +1,4 @@
-package org.lotus.tecent.forum;
+package org.lotus.tencent.forum;
 
 import java.util.Date;
 

@@ -1,4 +1,4 @@
-package org.lotus.tecent.forum;
+package org.lotus.tencent.forum;
 
 /**
  * Created by quanchengyun on 2018/11/30.
