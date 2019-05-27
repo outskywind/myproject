@@ -5,7 +5,7 @@ spring:
     config:
           server:
             git:
-              uri: https://gitlab.lotus.com/lotus/config
+              uri: http://gitlab.lotus.com/lotus/config
               #repos:
               #  - patterns: multi-repo-demo-*
               #    uri: https://github.lotus.com/lotus/config
