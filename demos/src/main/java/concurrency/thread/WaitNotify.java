@@ -72,6 +72,7 @@ public class WaitNotify {
 							//此时此线程没有运行了,
 							System.out.println("full ,call wait " +Thread.currentThread().getName());
 							lock.wait();
+							System.out.println("state:  " + Thread.currentThread().getState());
 							System.out.println("notified:  "+Thread.currentThread().getName());
 						}
 						//

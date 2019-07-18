@@ -26,12 +26,9 @@ public class LoaderTest {
 	}
 	
 	private class MyClassLoader extends URLClassLoader{
-		
-		
 
 		public MyClassLoader(URL[] urls) {
 			super(urls);
-			
 		}
 		
 	
