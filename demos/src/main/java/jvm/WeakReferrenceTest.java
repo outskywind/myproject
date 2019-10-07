@@ -20,4 +20,8 @@ public class WeakReferrenceTest {
 		System.out.println(wkr.get());
 	}
 
+
+
+
+
 }

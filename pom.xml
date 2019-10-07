@@ -20,6 +20,7 @@
         <module>lotus-spring-autoconfigure</module>
         <module>tencent</module>
         <module>spring-cloud-template</module>
+        <module>algorithm</module>
     </modules>
 
 
