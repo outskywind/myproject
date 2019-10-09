@@ -66,4 +66,64 @@ public class Strings {
 
 
 
+    //2.start------------------------------------------------------------
+    /**
+     * 最长回文子串问题 ,
+     * 1.manacher 算法 ，扩展字符数组填充特殊字符# ，2N-1
+     * 2. 以i为中心扩展查找
+     */
+
+    private static void palindromic(char[] str){
+        char[] extend = new char[str.length*2-1];
+        for(int i=0,j=0;i<str.length;i++,j++){
+            extend[j]=str[i];
+            j++;
+            if (j<extend.length)
+                extend[j]='#';
+        }
+
+        int[] mp = new int[extend.length];
+
+        int m=0,r=0;
+        for(int i=0;i<extend.length;i++){
+            mp[i]= i < r ? Math.min(mp[2*m-i],r-i):1;
+            while(i-mp[i]>=0 && i+mp[i]<extend.length && extend[i-mp[i]]==extend[i+mp[i]]){
+                mp[i]++;
+            }
+            //i为中心的构成回文，如果i大于等于 r ,那么扩展后 r=i,m=i
+            if(i+mp[i] > r) {
+                r=i+mp[i]-1;
+                m=i;
+            }
+        }
+        //找到最大的那一个
+        int max=0;
+        for(int i=0;i<mp.length;i++){
+            if (mp[i]>mp[max]){
+                max=i;
+            }
+        }
+        if (mp[max]>1) {
+            int left = max-mp[max]+1;
+            int right = max+mp[max]-1;
+            left = (left+1)/2;
+            right = (right-1)/2;
+            for (int i=left;i<=right;i++){
+                System.out.print(str[i]);
+            }
+        }
+    }
+
+    @Test
+    public void testPalindromic(){
+        char[] origin = "abcdeffeffedcab".toCharArray();
+        palindromic(origin);
+    }
+
+    //2. end------------------------------
+
+
+
+
+
 }
