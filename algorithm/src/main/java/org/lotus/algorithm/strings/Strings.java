@@ -15,7 +15,7 @@ public class Strings {
     private static  char[] getStr(){
         return Arrays.copyOf(str,str.length);
     }
-    //1.start-----------------------------------------------------------
+    //1.翻转子字符串-----------------------------------------------------------
     /**
      * 在原字符串中把字符串尾部的m个字符移动到字符串的头部，
      * 要求：长度为n的字符串操作时间复杂度为O(n)，空间复杂度为O(1)。
@@ -62,13 +62,12 @@ public class Strings {
     private static void revertWord(){
         //略
     }
-    //1.end-----------------------------------------------------------
+    //1.end-----------------------------------------------------------------------
 
 
 
-    //2.start------------------------------------------------------------
+    //2.最长回文子串问题------------------------------------------------------------
     /**
-     * 最长回文子串问题 ,
      * 1.manacher 算法 ，扩展字符数组填充特殊字符# ，2N-1
      * 2. 以i为中心扩展查找
      */
@@ -92,7 +91,7 @@ public class Strings {
             }
             //i为中心的构成回文，如果i大于等于 r ,那么扩展后 r=i,m=i
             if(i+mp[i] > r) {
-                r=i+mp[i]-1;
+                r=i+mp[i];
                 m=i;
             }
         }
@@ -119,8 +118,110 @@ public class Strings {
         char[] origin = "abcdeffeffedcab".toCharArray();
         palindromic(origin);
     }
-
     //2. end------------------------------
+
+
+
+    //3. 字符串hash -------------------------------------
+
+    /**
+     *  h(s[i])= s[i]*b^i mod M
+     *  h(s) = h(s[0])+...+ h(s[n])
+     *  h(s[l,r]) = h(s[0,r])-h(s[0,l-1])
+     *  h(s[l,r])=h(s[l-1,r-1]) - h(s[l-1]) + h(s[r]);
+     * 找出在目标字符串中 target 包含的 模式子串 pattern
+     *
+     * O(N+M) 平均时间，极端情况下,O(N*M)
+     */
+    public static int  patternMatch( char[] target,char[] pattern){
+
+        //计算字符串hash
+        //前缀hash  --Rabin-Karp
+        if(pattern.length>target.length){
+            return -1;
+        }
+        //缺陷是计算的数字要在一个long 范围内
+        int b = 233;
+        int M = 1000000007;
+
+        long hashPattern = 0;
+        long hashTarget = 0;
+        long bl = 1;
+
+        for(int i=1;i<pattern.length;i++){
+            bl = bl*b;
+        }
+        bl=bl%M;
+
+        for(int i=0;i<pattern.length;i++){
+            hashPattern = (hashPattern*b+pattern[i])%M;
+            hashTarget = (hashTarget*b+target[i])%M;
+        }
+
+        int pos = -1;
+        for(int i=0;i<target.length-pattern.length;i++){
+            if (hashPattern == hashTarget){
+                pos=i;
+                break;
+            }
+            hashTarget = (hashTarget*b - (target[i]*bl*b)%M + target[i+pattern.length])%M;
+        }
+        return pos;
+    }
+
+
+    @Test
+    public void testPatternMatch(){
+        char[] target  = ("afhkcvaofaaamvakidwvbhadoavbiqqqqhsdlkczovoavaqafbmkginl" +
+                "ogapipahnfjadnvcxbxdiazdlkfdfeeigdbjvqweqiutfafpvpzvbadbahufu").toCharArray();
+        char[]  pattern = "lkfdf".toCharArray();
+
+        int  pos = patternMatch(target,pattern);
+        System.out.println(pos);
+    }
+
+
+    /*private  long  hash(char[] str,int dwHashType){
+        long  seed1= 0x7FED7FED;
+        long seed2= 0xEEEEEEEE;
+
+        long[] cryptTable=prepareCryptTable();
+        int ch;
+        for (int i=0;i<str.length;i++)
+        {
+            ch = str[i];
+            seed1 = cryptTable[(dwHashType << 8) + ch] ^ (seed1 + seed2);
+            seed2 = ch + seed1 + seed2 + (seed2 << 5) + 3;
+        }
+        return seed1;
+    }
+
+    static long[] prepareCryptTable()
+    {
+        long seed = 0x00100001;
+        int index2=0,index1=0, i=0;
+        long[] cryptTable = new long[256];
+        for(index1 = 0; index1 < 256; index1++) {
+            for(index2 = index1, i = 0; i < 5; i++, index2 += 256)
+            {
+                long temp1, temp2;
+                seed = (seed * 125 + 3) % 0x2AAAAB;
+                temp1 = (seed & 0xFFFF) << 0x10;
+                seed = (seed * 125 + 3) % 0x2AAAAB;
+                temp2 = (seed & 0xFFFF);
+                cryptTable[index2] = ( temp1 | temp2 );
+            }
+        }
+        return cryptTable;
+    }*/
+
+    //3. end--------------------------------------------
+
+
+
+
+
+
 
 
 
