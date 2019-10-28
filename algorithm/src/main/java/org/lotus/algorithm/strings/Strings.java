@@ -122,7 +122,7 @@ public class Strings {
 
 
 
-    //3. 字符串hash -------------------------------------
+    //3. 字符串匹配   hash-------------------------------------
 
     /**
      *  h(s[i])= s[i]*b^i mod M
@@ -162,6 +162,8 @@ public class Strings {
         for(int i=0;i<target.length-pattern.length;i++){
             if (hashPattern == hashTarget){
                 pos=i;
+                //这里如果相等，严谨来说还需要一个个比较
+                //基于hash 映射的 字符串匹配算法，效率取决于hash的效率
                 break;
             }
             hashTarget = (hashTarget*b - (target[i]*bl*b)%M + target[i+pattern.length])%M;
@@ -179,6 +181,19 @@ public class Strings {
         int  pos = patternMatch(target,pattern);
         System.out.println(pos);
     }
+
+    /**
+     * 字符串匹配  BM 算法
+     *
+     */
+    public int BMPattern(){
+        //计算前后缀move
+
+    }
+
+
+
+
 
 
     /*private  long  hash(char[] str,int dwHashType){
