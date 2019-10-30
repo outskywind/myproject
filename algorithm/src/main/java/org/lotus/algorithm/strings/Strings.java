@@ -186,9 +186,73 @@ public class Strings {
      * 字符串匹配  BM 算法
      *
      */
-    public int BMPattern(){
+    public int BMPattern(char[] target, char[] pattern){
         //计算前后缀move
+        //表示当前字符为结尾的
+        /**
+         *  pattern  + + + + + + + + + [i + + + ] + + + [+ + + +]
+         *           + + + + + + + + + [+ + + + ] + + + [+ + + +]
+         *                             length=4 ,以及最长匹配的 k ,m
+         */
+        int length=0;
+        //当前字符失配时，好后缀规则移动的距离
+        int[] move = new int[pattern.length];
+        int j=-1;//当前字符为首的后缀,长度
+        int k=-1;// 已找到的最大的匹配的后缀的首字符
+        int l=-1;// 已找到的最大的匹配的后缀的长度
+        //
+        int tail= pattern.length-1;
+        for(int i=tail;i>=0;i--){
+            int old_l=l;
+            //k==-1 没有任何匹配的后缀子串
+            if (l<=0){
+                //与tail比较
+                if (pattern[i]==pattern[tail]){
+                    k=i;
+                    l=l+1;
+                    //
+                }
+            }
+            else {
+                //计算当前包含当前字符的子串 长度是否 > 当前最大子串
+                if(j>l){
+                    k=i;
+                    l=j;
+                }
+                //找到了新的串 更新move
+                //只更新长度比之前子串长的部分的move值
+                if(l>old_l){
+                   move[tail-l+1]=tail-l+1-k;
+                }
+            }
+            if (j=-1)
+            j= (pattern[i]==pattern[tail-j])?j+1:0;
+        }
+        //再次补正move
+        for(int i=0;i<=tail-l;i++){
+            move[i]= move[tail-l+1];
+        }
 
+        for (int i=0;i<pattern.length;i++){
+            System.out.print(pattern[i]+" ");
+        }
+        System.out.println();
+        for (int i=0;i<move.length;i++){
+            System.out.print(move[i]+" ");
+        }
+        System.out.println();
+        return 0;
+
+    }
+
+    @Test
+    public void testBMPattern(){
+        char[] target  = ("afhkcvaofaaamvakidwvbhadoavbiqqqqhsdlkczovoavaqafbmkginl" +
+                "ogapipahnfjadnvcxbxdiazdlkfdfeeigdbjvqweqiutfafpvpzvbadbahufu").toCharArray();
+        char[]  pattern = "xc dcbacba nbmbadcba".toCharArray();
+
+        int  pos = BMPattern(target,pattern);
+        System.out.println(pos);
     }
 
 
