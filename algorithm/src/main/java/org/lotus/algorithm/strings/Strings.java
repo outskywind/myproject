@@ -183,7 +183,7 @@ public class Strings {
     }
 
     /**
-     * 字符串匹配  BM 算法
+     * 字符串匹配  Boyer-Moore-Galil
      *
      */
     public int BMPattern(char[] target, char[] pattern){
@@ -197,20 +197,23 @@ public class Strings {
         int length=0;
         //当前字符失配时，好后缀规则移动的距离
         int[] move = new int[pattern.length];
-        int j=-1;//当前字符为首的后缀,长度
-        int k=-1;// 已找到的最大的匹配的后缀的首字符
-        int l=-1;// 已找到的最大的匹配的后缀的长度
+        int j=0;//当前字符为首的后缀,长度
+        int k=0;// 已找到的最大的匹配的后缀的首字符
+        int l=0;// 已找到的最大的匹配的后缀的长度
         //
         int tail= pattern.length-1;
         for(int i=tail;i>=0;i--){
+            if(i==tail){
+                continue;
+            }
             int old_l=l;
             //k==-1 没有任何匹配的后缀子串
+            j= (pattern[i]==pattern[tail-j])?j+1:(pattern[i]==pattern[tail]?1:0);
             if (l<=0){
                 //与tail比较
                 if (pattern[i]==pattern[tail]){
                     k=i;
                     l=l+1;
-                    //
                 }
             }
             else {
@@ -219,14 +222,13 @@ public class Strings {
                     k=i;
                     l=j;
                 }
-                //找到了新的串 更新move
-                //只更新长度比之前子串长的部分的move值
-                if(l>old_l){
-                   move[tail-l+1]=tail-l+1-k;
-                }
             }
-            if (j=-1)
-            j= (pattern[i]==pattern[tail-j])?j+1:0;
+            //找到了新的串 更新move
+            //只更新长度比之前子串长的部分的move值
+            if(l>old_l){
+                move[tail-l+1]=tail-l-k+1;
+            }
+            System.out.println("j,k,l="+j+","+k+","+l);
         }
         //再次补正move
         for(int i=0;i<=tail-l;i++){
