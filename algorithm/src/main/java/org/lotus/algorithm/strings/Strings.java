@@ -184,9 +184,9 @@ public class Strings {
 
     /**
      * 字符串匹配  Boyer-Moore-Galil
-     *
+     * yes- u made it 花了1周的时间？？理解
      */
-    public int BMPattern(char[] target, char[] pattern){
+    public int[] BMPattern(char[] target, char[] pattern){
         //计算前后缀move
         //表示当前字符为结尾的
         /**
@@ -194,9 +194,99 @@ public class Strings {
          *           + + + + + + + + + [+ + + + ] + + + [+ + + +]
          *                             length=4 ,以及最长匹配的 k ,m
          */
-        int length=0;
         //当前字符失配时，好后缀规则移动的距离
+        int[] good_move= good_move(pattern);
+        int[] bad_move= bad_move(pattern,65535);
+        int ord = get_min_ord(pattern);
+        System.out.println(String.copyValueOf(target));
+        //System.out.println(String.copyValueOf(pattern));
+        //System.out.println("ord="+ord);
+
+        //start
+        int k=pattern.length-1;    //text
+        int j=pattern.length-1;   //pattern
+        int last=0;               //pattern end
+
+        int[] match= new int[pattern.length-1];
+        int mi=0;
+        while(k<target.length){
+            //打印
+            for(int off=k-pattern.length;off>=0;off--){
+                System.out.print(" ");
+            }
+            System.out.println(String.valueOf(pattern));
+
+            for (;j>=last && target[k]==pattern[j] ;k--,j--){
+            }
+            //失配
+            if(j>=last){
+                k += Math.max(bad_move[target[k]], good_move[j]);
+            }
+            //完全匹配,计算最小的周期串
+            else{
+                System.out.println("bingo");
+                match[mi++]=k+1;
+                if (ord>0) {
+                    k+=(ord+pattern.length);
+                    last=pattern.length-ord;
+                }else
+                {
+                    k+=(pattern.length+pattern.length);
+                    last=0;
+                }
+            }
+            j = pattern.length-1;
+        }
+
+
+        /*for (int i=0;i<pattern.length;i++){
+            System.out.print(pattern[i]+" ");
+        }
+        System.out.println();
+        for (int i=0;i<move.length;i++){
+            System.out.print(move[i]+" ");
+        }
+        System.out.println();*/
+        return match;
+    }
+
+    private int get_min_ord(char[] pattern) {
+        //计算最小的正周期，必须大于等于1
+        int ord=1;
+        if (pattern.length<2*ord) return 0;
+        int i=ord;
+        while (i<pattern.length){
+            if(pattern[i]==pattern[i-ord]){
+                i++;
+            }else {
+                ord++;
+                if (ord>pattern.length/2){
+                    return 0;
+                }
+                i=ord;
+            }
+        }
+        return ord;
+    }
+
+
+    //需要构建一个所有字符的字典
+    private int[] bad_move(char[] pattern,int charset_size) {
+        int[] move = new int[charset_size];
+        for (int i=0;i<charset_size;i++){
+            move[i]= pattern.length;
+        }
+        for (int i=0;i<pattern.length;i++){
+            move[pattern[i]]= pattern.length -1-i;
+        }
+        return move;
+    }
+
+
+    private  int[] good_move(char[]  pattern){
         int[] move = new int[pattern.length];
+        //i-tail段，在文中出现的最右的匹配位置距离，也就是最小距离
+        int[] suffix = new int[pattern.length];
         int j=0;//当前字符为首的后缀,长度
         int k=0;// 已找到的最大的匹配的后缀的首字符
         int l=0;// 已找到的最大的匹配的后缀的长度
@@ -207,7 +297,6 @@ public class Strings {
                 continue;
             }
             int old_l=l;
-            //k==-1 没有任何匹配的后缀子串
             j= (pattern[i]==pattern[tail-j])?j+1:(pattern[i]==pattern[tail]?1:0);
             if (l<=0){
                 //与tail比较
@@ -223,38 +312,44 @@ public class Strings {
                     l=j;
                 }
             }
-            //找到了新的串 更新move
-            //只更新长度比之前子串长的部分的move值
+            //记录最右的后缀距离
             if(l>old_l){
-                move[tail-l+1]=tail-l-k+1;
+                suffix[tail-l+1]=tail-l+1-k;
             }
-            System.out.println("j,k,l="+j+","+k+","+l);
-        }
-        //再次补正move
-        for(int i=0;i<=tail-l;i++){
-            move[i]= move[tail-l+1];
+            //System.out.println("j,k,l="+j+","+k+","+l);
         }
 
-        for (int i=0;i<pattern.length;i++){
-            System.out.print(pattern[i]+" ");
-        }
-        System.out.println();
-        for (int i=0;i<move.length;i++){
-            System.out.print(move[i]+" ");
-        }
-        System.out.println();
-        return 0;
 
+       /* for(int i=0;i<=tail;i++){
+            System.out.print(suffix[i]+" ");
+        }
+        System.out.println();*/
+
+        //计算move
+        for(int i=0;i<=tail-1;i++){
+            if (suffix[i+1]>0)
+                move[i]= suffix[i+1]+tail-i;
+            else
+                //对于没有匹配到的后缀，查找最长的前缀
+                move[i]=  tail+1-2*j+tail-i;
+        }
+        move[tail]=1;
+        return move;
     }
 
     @Test
     public void testBMPattern(){
-        char[] target  = ("afhkcvaofaaamvakidwvbhadoavbiqqqqhsdlkczovoavaqafbmkginl" +
+        char[] target  = ("afhkcvaofaaamvakidcbaebacbacbasdlkczovoaababcababcababl" +
                 "ogapipahnfjadnvcxbxdiazdlkfdfeeigdbjvqweqiutfafpvpzvbadbahufu").toCharArray();
-        char[]  pattern = "xc dcbacba nbmbadcba".toCharArray();
+        char[]  pattern = "ababcababcabab".toCharArray();
 
-        int  pos = BMPattern(target,pattern);
-        System.out.println(pos);
+        int[]  pos = BMPattern(target,pattern);
+        for (int i:pos){
+            if (i>0){
+                System.out.print(i+" ");
+            }
+        }
+
     }
 
 
