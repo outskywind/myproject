@@ -231,7 +231,7 @@ public class Strings {
                     last=pattern.length-ord;
                 }else
                 {
-                    k+=(pattern.length+pattern.length);
+                    k+=(pattern.length+good_move[j]);
                     last=0;
                 }
             }
@@ -341,6 +341,10 @@ public class Strings {
     public void testBMPattern(){
         char[] target  = ("afhkcvaofaaamvakidcbaebacbacbasdlkczovoaababcababcababl" +
                 "ogapipahnfjadnvcxbxdiazdlkfdfeeigdbjvqweqiutfafpvpzvbadbahufu").toCharArray();
+        //char[]  pattern = "ababcababcabab".toCharArray();
+
+        //char[]  pattern = "ababcababcabab".toCharArray();
+
         char[]  pattern = "ababcababcabab".toCharArray();
 
         int[]  pos = BMPattern(target,pattern);
