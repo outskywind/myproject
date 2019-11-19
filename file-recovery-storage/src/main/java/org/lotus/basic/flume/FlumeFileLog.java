@@ -117,7 +117,7 @@ public class FlumeFileLog<T> implements FileLog<T> {
 
 
 
-    public void startIfNot(){
+    private void startIfNot(){
         //未初始化
         if(status.compareAndSet(0,1)){
             Thread t = new Thread(new Runnable() {
@@ -166,7 +166,7 @@ public class FlumeFileLog<T> implements FileLog<T> {
      * 记录到channel
      * @param record
      */
-    public void record(T record){
+    private void record(T record){
         if(!channel.isOpen()){
             return;
         }
