@@ -15,3 +15,13 @@ ribbon:
     eureka:
         enabled: true
 
+appName: 'service-b'
+skye:
+  consulCheckInterval: 5s
+  consulServer: 10.40.11.80:8500,10.40.11.81:8500,10.40.11.82:8500
+  dynamicConf:
+    enable: false
+  kafkaServers: base-kafka01.7d.cn:9092,base-kafka02.7d.cn:9092,base-kafka03.7d.cn:9092
+  prometheus:
+    port: 12431
+  report: true

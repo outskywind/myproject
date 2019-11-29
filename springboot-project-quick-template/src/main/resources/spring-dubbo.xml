@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.1.xsd
+	http://code.alibabatech.com/schema/dubbo http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+
+    <!--<dubbo:application name="${dubbo.application.name}"
+                       owner="${dubbo.application.owner}"/>
+    <dubbo:registry protocol="${dubbo.registry.protocol}"
+                    address="${dubbo.registry.address}"/>
+    <dubbo:consumer timeout="${dubbo.consumer.timeout}"
+                    check="false"/>
+    <dubbo:protocol name="${dubbo.protocol.name}" port="${dubbo.protocol.port}"
+                    threadpool="cached" threads="${dubbo.service.provider.threads:200}"/> -->
+    <!--<dubbo:reference id="accountCenterService"
+                     interface="com.dafy.sevend.accountcenter.rpc.api.service.AccountCenterService"/>-->
+    <dubbo:reference id="quotaService"
+                     interface="com.dafy.sevend.accountcenter.rpc.api.service.QuotaService"/>
+    <dubbo:reference id="bankService"
+                     interface="com.dafy.sevend.paymentcenter.rpc.api.service.IBankService"/>
+    <dubbo:reference id="channelTransferService"
+                     interface="com.dafy.sevend.paymentcenter.rpc.api.service.ChannelTransferService"/>
+    <dubbo:reference id="withholdService"
+                     interface="com.dafy.sevend.paymentcenter.rpc.api.service.IWithholdService"/>
+    <dubbo:reference id="innerAccountCenterService"
+                     interface="com.dafy.sevend.accountcenter.rpc.api.service.InnerAccountCenterService"/>
+    <dubbo:reference id="commonSignService" interface="com.dafy.sevend.cfcacenter.rpc.api.service.CommonSignService"/>
+
+    <dubbo:reference id="customerContactService" interface="com.dafy.sevend.accountcenter.rpc.api.service.CustomerContactService"/>
+    <!-- <dubbo:reference id="customerSupplyService"
+                     interface="com.dafy.sevend.contacts.service.CustomerSupplyService"/>
+    <dubbo:reference id="customerContactService"
+                     interface="com.dafy.sevend.accountcenter.rpc.api.service.CustomerContactService"/>-->
+<!--    <dubbo:reference id="pushCenterService"
+                     interface="com.dafy.sevend.pushcenter.rpc.api.service.PushCenterService"/>-->
+
+    <!--<dubbo:provider filter="dubboLogFilter" timeout="30000" loadbalance="${dubbo.service.loadbalance}"/>-->
+</beans>

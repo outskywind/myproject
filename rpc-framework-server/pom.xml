@@ -10,6 +10,7 @@
 
 	<properties>
 		<project.source.Encoding>UTF-8</project.source.Encoding>
+		<spring-boot.version>2.1.5.RELEASE</spring-boot.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>

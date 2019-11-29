@@ -1,5 +1,7 @@
 package programme;
 
+import org.junit.Test;
+
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
@@ -24,6 +26,21 @@ public class GenericTypes {
         }else {
             ptc = (Class)pt.getActualTypeArguments()[0];
         }
+    }
+
+
+    static class P<A,B> {
+
+    }
+
+    static class C  extends P<String,String> {
+
+    }
+
+
+    @Test
+    public void testP(){
+        P<String,String> v = new C();
     }
 
 

@@ -11,10 +11,15 @@
 
     <artifactId>spring-boot-autoconfig-configcenter</artifactId>
 
+    <properties>
+        <spring-boot.version>2.1.5.RELEASE</spring-boot.version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
+            <version>${spring-boot.version}</version>
         </dependency>
 
     </dependencies>

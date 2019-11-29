@@ -2,6 +2,7 @@ package org.lotus.spring.app;
 
 import org.lotus.spring.aop.Pointcut;
 import org.lotus.spring.factory.ValidateFactoryBean;
+import org.lotus.spring.service.AppServiceImpl;
 import org.lotus.spring.service.Appservice;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +15,7 @@ public class AppConfig {
 
     @Bean
     public Appservice appservice(){
-        return new Appservice();
+        return new AppServiceImpl();
     }
 
 
@@ -23,7 +24,7 @@ public class AppConfig {
     //that is ok , we cant use  method parameter type inject here
     public ValidateFactoryBean factory(){
         ValidateFactoryBean<Appservice> appserviceFatory = new ValidateFactoryBean<>();
-        appserviceFatory.setTarget(appservice());
+        appserviceFatory.setTarget(Appservice.class,appservice());
         return appserviceFatory;
     }
 

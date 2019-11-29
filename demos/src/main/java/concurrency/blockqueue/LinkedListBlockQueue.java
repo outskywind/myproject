@@ -88,12 +88,12 @@ public class LinkedListBlockQueue<E> implements BlockQueue<E>{
 	}
 	
 	//当对象被传递给线程之后，只要线程没有销毁，对象就永远不会被回收
-	class Customer implements Runnable{
+	class Consumer implements Runnable{
 		
 		private LinkedListBlockQueue queue;
 		
 		
-		public Customer(LinkedListBlockQueue<E> queue){
+		public Consumer(LinkedListBlockQueue<E> queue){
 			this.queue = queue;
 		}
 
@@ -119,7 +119,7 @@ public class LinkedListBlockQueue<E> implements BlockQueue<E>{
 		 for(int i=0;i<3;i++){
 			 //这才是正确的启动多线程的方式
 			new Thread(new Worker(this)) .start();
-			new Thread(new Customer(this)) .start();
+			new Thread(new Consumer(this)) .start();
 			//这只是单纯的方法调用，并不会启动新的线程
 			//  new Customer(this).run();
 		  }
