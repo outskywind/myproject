@@ -1,5 +1,11 @@
 package org.lotus.algorithm.tree;
 
+import com.sun.xml.internal.org.jvnet.mimepull.CleanUpExecutorFactory;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 /**
  * 红黑搜索树
  *
@@ -28,12 +34,14 @@ public class RBTree {
         boolean isBlack=false;
     }
 
-    static  class CompareUtil<T>{
-
-
-         int compare( T key1,T key2){
+    static  class CompareUtil{
+         static <T> int compare( T key1,T key2){
              if (key1 instanceof String){
                  return ((String)key1).compareTo((String)key2);
+             }else{
+                 Integer v1 = (Integer)key1;
+                 Integer v2 = (Integer)key2;
+                 return  v1 -  v2;
              }
          }
     }
@@ -41,19 +49,165 @@ public class RBTree {
 
     Node root = null;
 
-    public int insert(Node<T> node){
+    public <T> void insert(T key){
+        Node<T> node = new Node<>();
+        node.key=key;
         node.isBlack=false;
         //从根节点开始遍历插入
         if(root==null) {
             root=node;
-            return 0;
+            node.isBlack=true;
+            return ;
         }
-        Node p = root;
-        if (node.key)
+        Node ip = root;
+        //小的左子树，>=的右子树
+        while(ip!=null){
+            if (CompareUtil.compare(node.key,ip.key)<0){
+                if (ip.left==null) {
+                    //
+                    ip.left = node;
+                    node.parent = ip;
+                    break;
+                }
+                ip = ip.left;
+            }
+            else{
+                if (ip.right==null){
+                    ip.right = node;
+                    node.parent = ip;
+                    break;
+                }
+                ip=ip.right;
+            }
+        }
+        //pp 父节点
+        fixup_insert(node);
+    }
 
+    /**
+     *  插入的是红节点 需要检查 是否违反性质 红的孩子都是黑
+     * @param node
+     * @param <T>
+     */
+    private <T> void fixup_insert(Node<T> node) {
+        //如果父节点是黑的，就没有违反性质
+        if (node.parent.isBlack) return;
+        //
+        Node p = node.parent;
+        while (!p.isBlack){
+            Node uncle = null;
+            if (p == p.parent.left) {
+                uncle = p.parent.right;
+            }else{
+                uncle = p.parent.left;
+            }
+            //1 如果叔节点也是红的，变色 ，上移
+            if (uncle!=null && !uncle.isBlack){
+                p.parent.isBlack=false;
+                p.isBlack=true;
+                uncle.isBlack=true;
+                p =p.parent.parent;
+            }
+            //如果叔节点是黑的，就要旋转
+            else{
+                //插入的是右节点，左旋一下
+                if(p == p.parent.left){
+                    if (node == p.right){
+                        left_rotate(p);
+                    }
+                    //移动p指针
+                    p = p.parent;
+                    p.isBlack=false;
+                    node.isBlack=true;
+                    right_rotate(p);
+                } else if(p == p.parent.right){
+                    if(node == p.left){
+                        right_rotate(p);
+                    }
+                    p = p.parent;
+                    p.isBlack=false;
+                    node.isBlack=true;
+                    left_rotate(p);
+                }
+                //此时
+                p=node;
+            }
+        }
+        //root强制黑色
+        root.isBlack = true;
+    }
+
+    /**
+     *  以这个节点原点，将右轴左旋
+     * @param p
+     */
+    private void left_rotate(Node p) {
+        if(p.parent==null){
+            root = p.right;
+        }
+        else if (p.parent.left==p){
+            p.parent.left = p.right;
+        }else{
+            p.parent.right = p.right;
+        }
+        p.right.parent = p.parent;
+        p.parent = p.right;
+        Node pr = p.right;
+        p.right = p.right.left;
+        pr.left = p;
+    }
+
+    /**
+     *  左轴右旋,与右轴左旋 对称的
+     * @param p
+     */
+    private void right_rotate(Node p) {
+        if(p.parent==null){
+            root = p.left;
+        }
+        else if (p.parent.left==p){
+            p.parent.left = p.left;
+        }else{
+            p.parent.right = p.left;
+        }
+        p.left.parent = p.parent;
+        p.parent = p.left;
+        Node pr = p.left;
+        p.left = p.left.right;
+        pr.right = p;
     }
 
 
 
+    public void  printTree(){
+        List<Node> queue = new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty()){
+            print(queue);
+        }
+
+    }
+
+    private void print(List<Node> queue){
+        //广度优先,队头出队
+        int size = queue.size();
+        for(int i=0;i<size;i++){
+            Node node = queue.remove(0);
+            System.out.print(node.key+" ");
+            if (node.left!=null){
+                queue.add(node.left);
+            }
+            if (node.right!=null){
+                queue.add(node.right);
+            }
+            if(!node.key.equals("|")){
+                Node split = new Node();
+                split.key="|";
+                queue.add(split);
+            }
+
+        }
+        System.out.println();
+    }
 
 }
