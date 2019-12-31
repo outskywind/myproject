@@ -80,7 +80,7 @@ public class RBTree {
                 ip=ip.right;
             }
         }
-        //pp 父节点
+
         fixup_insert(node);
     }
 
@@ -93,88 +93,113 @@ public class RBTree {
         //如果父节点是黑的，就没有违反性质
         if (node.parent.isBlack) return;
         //
-        Node p = node.parent;
-        while (!p.isBlack){
+        while (node.parent!=null && !node.parent.isBlack){
+            Node p = node.parent;
             Node uncle = null;
             if (p == p.parent.left) {
                 uncle = p.parent.right;
             }else{
                 uncle = p.parent.left;
             }
-            //1 如果叔节点也是红的，变色 ，上移
+            //1 如果叔节点也是红的，变色 ，上移,本轮无旋转
             if (uncle!=null && !uncle.isBlack){
                 p.parent.isBlack=false;
                 p.isBlack=true;
                 uncle.isBlack=true;
-                p =p.parent.parent;
+                //上移2层
+                node=node.parent.parent;
+                //旋转node一次
             }
-            //如果叔节点是黑的，就要旋转
+            //如果叔节点是黑的，判断旋转1次
             else{
-                //插入的是右节点，左旋一下
-                if(p == p.parent.left){
-                    if (node == p.right){
-                        left_rotate(p);
-                    }
-                    //移动p指针
-                    p = p.parent;
-                    p.isBlack=false;
-                    node.isBlack=true;
-                    right_rotate(p);
-                } else if(p == p.parent.right){
-                    if(node == p.left){
-                        right_rotate(p);
-                    }
-                    p = p.parent;
-                    p.isBlack=false;
-                    node.isBlack=true;
-                    left_rotate(p);
+                //旋转准备下一次的旋转处理
+                if (node == node.parent.left && node.parent==node.parent.parent.right){
+                    node=node.parent;
+                    right_rotate(node);
+                }else if(node == node.parent.right && node.parent==node.parent.parent.left){
+                    node=node.parent;
+                    left_rotate(node);
                 }
-                //此时
-                p=node;
+                else{
+                    //最终的，变色，旋转1次。
+                    node.parent.parent.isBlack=false;
+                    node.parent.isBlack=true;
+                    if (node.parent==node.parent.parent.left){
+                        right_rotate(node.parent.parent);
+                    }else if(node.parent==node.parent.parent.right){
+                        left_rotate(node.parent.parent);
+                    }
+                }
             }
         }
         //root强制黑色
         root.isBlack = true;
     }
 
+    //删除操作
+    public <T> void remove(T key){
+        Node ip = root;
+        while(ip!=null){
+            int cmp = CompareUtil.compare(key,ip.key);
+            if (cmp<0){
+                ip = ip.left;
+            }
+            else if(cmp==0){
+                break;
+            }else{
+                ip = ip.right;
+            }
+        }
+        if (ip==null)return;
+
+    }
+
+
+
+
     /**
      *  以这个节点原点，将右轴左旋
-     * @param p
+     * @param node
      */
-    private void left_rotate(Node p) {
-        if(p.parent==null){
-            root = p.right;
+    private void left_rotate(Node node) {
+        //Node p = node.parent;
+        if(node.parent==null){
+            root = node.right;
         }
-        else if (p.parent.left==p){
-            p.parent.left = p.right;
+        else if (node.parent.left==node){
+            node.parent.left = node.right;
         }else{
-            p.parent.right = p.right;
+            node.parent.right = node.right;
         }
-        p.right.parent = p.parent;
-        p.parent = p.right;
-        Node pr = p.right;
-        p.right = p.right.left;
-        pr.left = p;
+        node.right.parent = node.parent;
+        node.parent = node.right;
+        Node pr = node.right;
+        node.right = node.right.left;
+        pr.left = node;
     }
 
     /**
      *  左轴右旋,与右轴左旋 对称的
-     * @param p
+     * @param node
      */
-    private void right_rotate(Node p) {
-        if(p.parent==null){
-            root = p.left;
+    private void right_rotate(Node node) {
+
+        if(node.parent==null){
+            root = node.left;
         }
-        else if (p.parent.left==p){
-            p.parent.left = p.left;
+        //1.修改parent的对应指针
+        else if (node.parent.left==node){
+            node.parent.left = node.left;
         }else{
-            p.parent.right = p.left;
+            node.parent.right = node.left;
         }
-        p.left.parent = p.parent;
-        p.parent = p.left;
-        Node pr = p.left;
-        p.left = p.left.right;
-        pr.right = p;
+        node.left.parent = node.parent;
+        //修改本节点parent指针
+        node.parent = node.left;
+        //修改左右子指针
+        Node pr = node.left;
+        node.left = node.left.right;
+        pr.right = node;
     }
 
 
@@ -193,7 +218,7 @@ public class RBTree {
         int size = queue.size();
         for(int i=0;i<size;i++){
             Node node = queue.remove(0);
-            System.out.print(node.key+" ");
+            System.out.print(node.key+"("+(node.isBlack?"B":"R")+")"+" ");
             if (node.left!=null){
                 queue.add(node.left);
             }
