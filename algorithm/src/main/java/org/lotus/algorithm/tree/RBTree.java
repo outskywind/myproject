@@ -80,8 +80,7 @@ public class RBTree {
                 ip=ip.right;
             }
         }
-
-        fixup_insert(node);
+        FIXUP_INSERT(node);
     }
 
     /**
@@ -89,7 +88,7 @@ public class RBTree {
      * @param node
      * @param <T>
      */
-    private <T> void fixup_insert(Node<T> node) {
+    private <T> void FIXUP_INSERT(Node<T> node) {
         //如果父节点是黑的，就没有违反性质
         if (node.parent.isBlack) return;
         //
@@ -152,9 +151,122 @@ public class RBTree {
         }
         if (ip==null)return;
 
+        //1.如果 ip 无孩子, 或只有一个孩子
+        if (ip.left==null || ip.right==null) {
+            Node  v = ip.left==null?ip.right:ip.left;
+            //ip 为根节点
+            if (ip.parent==null){
+                root = v;
+            }else{
+                //ip 非根节点
+                if (ip==ip.parent.left){
+                    ip.parent.left = v;
+                }else{
+                    ip.parent.right = v;
+                }
+                if (v!=null){
+                    v.parent = ip.parent;
+                }
+            }
+            return ;
+        }
+
+        //2. 2个孩子
+       Node y =  find_min(ip);
+       boolean original_isBlack = y.isBlack;
+       //
+        Node x = y.right;
+        Node yp = y.parent;
+
+        if (y==yp.left){
+            yp.left = x;
+        }else{
+            yp.right =x;
+        }
+        if (x!=null) {
+            x.parent = yp;
+        }
+
+        y.parent = ip.parent;
+        //如果ip根节点
+        if (ip.parent==null){
+            root = y;
+        }else{
+            if (ip.parent.left==ip){
+                ip.parent.left = y;
+            }else {
+                ip.parent.right = y;
+            }
+        }
+
+        y.left = ip.left;
+        y.right = ip.right;
+        if (ip.left!=null){
+            ip.left.parent=y;
+        }
+        if (ip.right!=null){
+            ip.right.parent=y;
+        }
+        y.isBlack  = ip.isBlack;
+
+        //如果y原本是黑节点，就要调整
+        if (original_isBlack){
+            FIXUP_REMOVE(x);
+        }
+
     }
 
+    /**
+     * x 继承了y的黑色，为了维护红黑性质不变
+     * @param x
+     */
+    private void FIXUP_REMOVE(Node x) {
+        //非根，黑节点
+        // x 如果是红，就退出循环，直接将x变黑即可
+        while(x.isBlack && x.parent!=null){
+            Node  b = getBorther(x);
+            //x 没有兄弟节点。则x直接上移
+            if(b==null){
+                x = x.parent;
+            }
+            //case1   brother 为红 ，将 x.parent 旋转 ， x.parent 变红
+            // b 变黑  b 更新节点指向
+            else if(!b.isBlack){
+                //左旋
+                if(b==x.parent.right){
+                    left_rotate(x.parent);
+                }else {
+                    //右旋
+                    right_rotate(x.parent);
+                }
+                b.isBlack = true;
+                x.parent.isBlack=false;
+            }
+            else{
+                //2. brother 为黑 ， brother.right 为红
 
+
+            }
+            
+        }
+        //x继承黑色
+        x.isBlack=true;
+    }
+
+    private Node getBorther(Node x) {
+        if (x==x.parent.left)return x.parent.right;
+        else return  x.parent.left;
+    }
+
+    private Node find_min(Node ip) {
+        Node p = ip;
+        Node c = ip.left==null?ip.right:ip.left;
+        while (c!=null){
+            p = c;
+            c = c.left==null?c.right:c.left;
+        }
+        return p;
+    }
 
 
     /**

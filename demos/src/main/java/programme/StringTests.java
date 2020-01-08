@@ -58,4 +58,12 @@ public class StringTests {
         return sb.toString();
     }
 
+    @Test
+    public void  testSubstring(){
+        String str = "20010884644260204106-A";
+        System.out.println(str.substring(0,str.length()-2));
+    }
+
+
+
 }
