@@ -21,5 +21,10 @@ public class TestUnits {
         tree.insert("w");
 
         tree.printTree();
+
+        tree.remove("f");
+
+        tree.printTree();
+
     }
 }

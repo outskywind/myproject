@@ -1,8 +1,5 @@
 package org.lotus.algorithm.tree;
 
-import com.sun.xml.internal.org.jvnet.mimepull.CleanUpExecutorFactory;
-
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -45,7 +42,6 @@ public class RBTree {
              }
          }
     }
-
 
     Node root = null;
 
@@ -213,7 +209,6 @@ public class RBTree {
         if (original_isBlack){
             FIXUP_REMOVE(x);
         }
-
     }
 
     /**
@@ -223,14 +218,14 @@ public class RBTree {
     private void FIXUP_REMOVE(Node x) {
         //非根，黑节点
         // x 如果是红，就退出循环，直接将x变黑即可
-        while(x.isBlack && x.parent!=null){
+        if (x==null)return;
+        while(x.isBlack && x!=root){
             Node  b = getBorther(x);
             //x 没有兄弟节点。则x直接上移
             if(b==null){
                 x = x.parent;
             }
-            //case1   brother 为红 ，将 x.parent 旋转 ， x.parent 变红
-            // b 变黑  b 更新节点指向
+            //case1   brother为红,将x.parent旋转,x.parent变红,b变黑
             else if(!b.isBlack){
                 //左旋
                 if(b==x.parent.right){
@@ -243,11 +238,42 @@ public class RBTree {
                 x.parent.isBlack=false;
             }
             else{
-                //2. brother 为黑 ， brother.right 为红
-
-
+                //case 2. brother为黑,brother.right为黑，brother.left 为黑
+                // x上移，brother黑->红
+                if( (b.left==null || b.left.isBlack) && (b.right==null || b.right.isBlack)){
+                    b.isBlack=false;
+                    x=x.parent;
+                }
+                //3.1brother为黑,brother.right为黑，brother.left 为红
+                //b旋转b变红bl变黑，->case4
+                else if( b==x.parent.right && (b.left!=null && !b.left.isBlack) && (b.right==null || b.right.isBlack)){
+                    //右旋
+                    right_rotate(b);
+                    b.isBlack=false;
+                    b.parent.isBlack=true;
+                }
+                //3.2对称的
+                else if (b==x.parent.left && (b.right!=null && !b.right.isBlack) && (b.left==null || b.left.isBlack)){
+                    //左旋
+                    left_rotate(b);
+                    b.isBlack=false;
+                    b.parent.isBlack=true;
+                }
+                //case4  b为黑 b.right 为红
+                //左旋x.parent,b变色x.parent,x.parent变黑,b.right变黑 x=root退出循环
+                else if(b==x.parent.right && b.right!=null && !b.right.isBlack){
+                    left_rotate(x.parent);
+                    b.right.isBlack=true;
+                    b.isBlack = x.parent.isBlack;
+                    x.parent.isBlack=true;
+                    x=root;
+                }else if(b==x.parent.left && b.left!=null && !b.left.isBlack) {
+                    b.left.isBlack=true;
+                    b.isBlack = x.parent.isBlack;
+                    x.parent.isBlack=true;
+                    x=root;
+                }
             }
-            
         }
         //x继承黑色
         x.isBlack=true;
@@ -322,7 +348,6 @@ public class RBTree {
         while(!queue.isEmpty()){
             print(queue);
         }
-
     }
 
     private void print(List<Node> queue){
@@ -342,7 +367,6 @@ public class RBTree {
                 split.key="|";
                 queue.add(split);
             }
-
         }
         System.out.println();
     }
