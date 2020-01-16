@@ -70,6 +70,8 @@ public class Strings {
     /**
      * 1.manacher 算法 ，扩展字符数组填充特殊字符# ，2N-1
      * 2. 以i为中心扩展查找
+     * 已知最右边界的回文，m 中心位置， r 最右边界 ，使用这个推理扩展i
+     * 按照这个算法，最右边界从不回溯，因此 最多比较 2N 次
      */
 
     private static void palindromic(char[] str){
