@@ -1,5 +1,7 @@
 package org.lotus.algorithm.arrayheap;
 
+import org.lotus.algorithm.sort.SortUtil;
+
 public class Arrays {
 
 
@@ -79,7 +81,19 @@ public class Arrays {
      * @return
      */
     private  static int  quickSelect(int[] arr, int k,int start,int end){
+        //
+        int num = (int)Math.ceil((end-start+1)/5);
+        int[] pivots = new int[num];
+        int m=0;
+        int i=0;
+        for(;i+5<=arr.length;i+=5){
+            SortUtil.insertSort(arr,i,i+5);
+            pivots[m++]=arr[i+2];
+        }
+        SortUtil.insertSort(arr,i,arr.length);
+        pivots[m]=arr[(int)Math.ceil((i+arr.length)/2)];
 
+        //int ppivot = quickSelect();
     }
 
 
