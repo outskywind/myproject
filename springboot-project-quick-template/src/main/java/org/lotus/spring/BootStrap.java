@@ -1,5 +1,7 @@
 package org.lotus.spring;
 
+import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.ConfigService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.core.io.UrlResource;
@@ -30,5 +32,9 @@ public class BootStrap {
             e.printStackTrace();
         }
         SpringApplication.run(BootStrap.class);
+
+        //namespace
+        Config config = ConfigService.getConfig("");
+
     }
 }
