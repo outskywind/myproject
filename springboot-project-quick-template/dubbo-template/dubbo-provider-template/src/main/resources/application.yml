@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: dubbo-provider
+
+dubbo:
+  scan:
+    base-packages: org.lotus.template.dubbo.service.impl
+  protocol:
+    name: dubbo
+    port: 12345
+  registry:
+    address: zookeeper://zk1.lotus.com:2181
+

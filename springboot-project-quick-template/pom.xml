@@ -6,7 +6,10 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
+    <packaging>pom</packaging>
+    <modules>
+        <module>dubbo-template</module>
+    </modules>
 
     <artifactId>springboot-project-quick-template</artifactId>
 
@@ -116,11 +119,11 @@
         </dependency>
         -->
         <!-- zk-client -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.curator</groupId>
             <artifactId>curator-recipes</artifactId>
             <version>4.0.1</version>
-        </dependency>
+        </dependency>-->
         <!-- zk-client end -->
 
         <dependency>
