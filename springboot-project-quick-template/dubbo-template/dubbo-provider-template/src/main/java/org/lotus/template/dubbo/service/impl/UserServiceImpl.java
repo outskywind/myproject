@@ -11,4 +11,9 @@ public class UserServiceImpl implements UserService {
     public String getName(String id) {
         return null;
     }
+
+    @Override
+    public String addUser(String userName, int age, int sex) {
+        return null;
+    }
 }
